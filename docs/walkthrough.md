@@ -26,8 +26,12 @@ CodeRabbit автоматично ревʼюїть ваш PR.
 
 ## Task 1 — Brownfield onboarding + Memory Bank + docs (~45 хв)
 
-1. **`.cursorignore`** у корені (≥5 патернів): `node_modules/`, `dist/`,
-   `build/`, `coverage/`, `*.min.js`, `*.snap`, lock-файли. **Не** виключайте `packages/**`.
+1. **Обмежити контекст** (≥5 патернів) — одним зі способів:
+   - **Cursor:** `.cursorignore` у корені
+   - **Claude Code:** `.claude/settings.json` → `permissions.deny`: `Read(...)`
+     (окремого `.claudeignore` немає; Claude також поважає `.gitignore`)
+   Патерни: `node_modules/`, `dist/`, `build/`, `coverage/`, `*.min.js`, `*.snap`,
+   lock-файли. **Не** виключайте `packages/**`.
 2. **Code Archaeology** (Broad → Narrow → Deep → **Verify**): `@codebase` →
    тека → файл. Завжди звіряйте відповідь AI проти коду.
 3. **Memory Bank** (3 файли): `docs/memory/projectbrief.md`, `techContext.md`
@@ -116,7 +120,7 @@ gh pr create --title "WS1: <ім'я> — <обрана capability>" --fill
 CodeRabbit зробить авто-рев'ю (1–3 хв): ✅ / ⚠️ / ❌ + pre-merge таблиця.
 
 **Definition of Done**
-- [ ] Task 1: `.cursorignore` + 3 файли Memory Bank + `docs/technical/architecture.md`
+- [ ] Task 1: `.cursorignore` **або** `.claude/settings.json` (deny) + 3 файли Memory Bank + `docs/technical/architecture.md`
 - [ ] Task 2: правила (`AGENTS.md`/`.cursor/rules`) + `docs/skills-research.md`
 - [ ] Task 3: повний OpenSpec-цикл + impl + тест
 - [ ] Task 4: `docs/ab-experiment.md`
