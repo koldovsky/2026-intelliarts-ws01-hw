@@ -149,3 +149,17 @@ export const shouldMaintainAspectRatio = (event: MouseEvent | KeyboardEvent) =>
 export const shouldRotateWithDiscreteAngle = (
   event: MouseEvent | KeyboardEvent | React.PointerEvent<HTMLCanvasElement>,
 ) => event.shiftKey;
+
+/**
+ * Matches the "export scene" keyboard shortcut: Ctrl/Cmd + Shift + E.
+ *
+ * Uses `matchKey` so it keeps working on non-latin keyboard layouts, and reads
+ * the platform-correct modifier via `KEYS.CTRL_OR_CMD` (Cmd on macOS, Ctrl
+ * elsewhere). Intended to be used from the export action's `keyTest()`.
+ */
+export const isExportShortcut = (
+  event: KeyboardEvent | React.KeyboardEvent<Element>,
+): boolean =>
+  Boolean(event[KEYS.CTRL_OR_CMD]) &&
+  event.shiftKey &&
+  matchKey(event, KEYS.E);
