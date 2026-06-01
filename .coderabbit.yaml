@@ -1,0 +1,183 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+#
+# CodeRabbit config — auto-review of Intelliarts WS1 homework PRs.
+# Workshop: "Modern AI SDLC: Greenfield vs Brownfield".
+# Place this file in the ROOT of the practice repo.
+
+language: "uk-UA"
+tone_instructions: >
+  Ти — ментор на воркшопі Intelliarts "Modern AI SDLC: Greenfield vs Brownfield".
+  Відповідай українською. Будь доброзичливим, але вимогливим.
+  Якщо учасник щось пропустив — поясни, що саме і чому це важливо.
+  Статуси через emoji: ✅ зроблено, ⚠️ частково, ❌ пропущено.
+
+early_access: false
+
+reviews:
+  profile: "assertive"
+  request_changes_workflow: false
+  high_level_summary: true
+  high_level_summary_placeholder: "@coderabbitai summary"
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  changed_files_summary: true
+  sequence_diagrams: false
+
+  auto_review:
+    enabled: true
+    drafts: true
+    auto_incremental_review: true
+    auto_pause_after_reviewed_commits: 0
+    base_branches:
+      - ".*"
+    ignore_title_keywords:
+      - "WIP"
+      - "[skip review]"
+    ignore_usernames:
+      - "dependabot[bot]"
+      - "renovate[bot]"
+      - "github-actions[bot]"
+
+  # ── File filters ──────────────────────────────────────────────
+  path_filters:
+    - "docs/**"
+    - "openspec/**"
+    - ".cursorignore"
+    - ".cursor/**"
+    - ".claude/**"
+    - "AGENTS.md"
+    - "!node_modules/**"
+    - "!dist/**"
+    - "!build/**"
+    - "!coverage/**"
+    - "!*.lock"
+    - "!yarn.lock"
+    - "!**/*.snap"
+    - "!**/*.min.js"
+    - "!**/*.min.css"
+
+  # ── Path-specific review instructions ─────────────────────────
+  path_instructions:
+    - path: ".cursorignore"
+      instructions: |
+        Task 1. Перевір: файл у корені, ≥ 5 розумних патернів для великого моноліту
+        (node_modules/, dist/, build/, coverage/, *.min.js, *.snap, lock-файли).
+        НЕ виключає core source (packages/**). Порожній — ❌.
+
+    - path: "docs/memory/projectbrief.md"
+      instructions: |
+        Task 1 — Memory Bank: projectbrief.md. Суть і мета Excalidraw (whiteboard
+        для collaborative drawing), структуровано, ≤200 рядків, без галюцинацій.
+
+    - path: "docs/memory/techContext.md"
+      instructions: |
+        Task 1 — Memory Bank: techContext.md. Стек (React, TS, Vite), версії,
+        команди (звір реальні — yarn), структура monorepo (packages/). ≤200 рядків.
+
+    - path: "docs/memory/systemPatterns.md"
+      instructions: |
+        Task 1 — Memory Bank: systemPatterns.md. Архітектура Excalidraw (canvas
+        rendering, element system, action system, state/appState), специфіка, не
+        generic React. ≤200 рядків.
+
+    - path: "docs/technical/architecture.md"
+      instructions: |
+        Task 1 — відтворена технічна документація (у репо її НЕМАЄ — dev-docs/README
+        прибрані навмисно). Перевір секції: High-level Architecture, Data Flow,
+        State Management, Rendering Pipeline, Package Dependencies. 100–700 рядків.
+        Бажано mermaid (синтаксично коректний). Лише факти з коду, без вигадок.
+
+    - path: "docs/memory/*.md"
+      instructions: |
+        Файли Memory Bank (Task 1): структурований Markdown, ≤200 рядків, факти
+        верифіковані проти коду, без placeholder-тексту.
+
+    - path: "AGENTS.md"
+      instructions: |
+        Task 2 — правила проєкту. Перевір: специфічні для Excalidraw (не generic),
+        описують межі, команди, конвенції; виведені з Memory Bank, не дублюють його.
+
+    - path: ".cursor/rules/**"
+      instructions: |
+        Task 2 — правила проєкту (Cursor). Специфічні для Excalidraw, корисні
+        constraint-правила, без конфліктів з конвенціями проєкту.
+
+    - path: "docs/skills-research.md"
+      instructions: |
+        Task 2 — дослідження Agent Skills. Перевір: визначені повторювані workflow
+        цього репо; запропоновано 1–2 доречні skills з обґрунтуванням (навіщо,
+        що автоматизують). Якщо лише generic-скіли без зв'язку з Excalidraw — ⚠️.
+
+    - path: ".claude/skills/**"
+      instructions: |
+        Task 2 (опц.) — доданий Agent Skill. Перевір структуру SKILL.md і що скіл
+        справді стосується повторюваного workflow у цьому проєкті.
+
+    - path: "openspec/changes/**/proposal.md"
+      instructions: |
+        Task 3 — OpenSpec proposal: чітко ЩО і НАВІЩО (проблема / scope capability).
+
+    - path: "openspec/changes/**/tasks.md"
+      instructions: |
+        Task 3 — OpenSpec tasks: атомарний, перевірюваний чек-ліст імплементації.
+
+    - path: "openspec/changes/**/specs/**/spec.md"
+      instructions: |
+        Task 3 — OpenSpec spec (ADDED Requirements): поведінка описана ДО коду.
+
+    - path: "docs/ab-experiment.md"
+      instructions: |
+        Task 4 — A/B. Таблиця з колонками Варіант (інструмент/модель) · Час · Токени
+        · Якість · Переробки · Моменти, заповнена для 2 варіантів (два інструменти
+        АБО дві моделі в одному інструменті), + короткий висновок «який під що».
+
+    - path: "docs/bmad-comparison.md"
+      instructions: |
+        Task 5 (bonus) — BMAD vs лінійний підхід. Необов'язкове; відсутність не помилка.
+
+  # ── Pre-merge checks (grading) ────────────────────────────────
+  pre_merge_checks:
+    title:
+      mode: "warning"
+      requirements: >
+        PR title should follow: "WS1: <participant-name> — <chosen capability>".
+
+    description:
+      mode: "warning"
+
+    custom_checks:
+      - mode: "warning"
+        name: "Task 1 — onboarding (.cursorignore + Memory Bank + docs)"
+        instructions: >
+          Check the PR adds: (1) a root `.cursorignore` with 5+ meaningful patterns;
+          (2) ALL THREE Memory Bank files docs/memory/{projectbrief,techContext,
+          systemPatterns}.md, each >= 20 lines of structured Markdown;
+          (3) docs/technical/architecture.md (recreated, since the repo ships no docs).
+          PASS if all present and substantive; FAIL if any is missing or too thin.
+
+      - mode: "warning"
+        name: "Task 2 — rules + skills research"
+        instructions: >
+          Check the PR adds project rules (AGENTS.md OR .cursor/rules/*.mdc) that are
+          Excalidraw-specific, AND docs/skills-research.md describing 1–2 relevant
+          Agent Skills with justification. PASS if both present and project-specific;
+          FAIL if rules are missing or skills-research is absent/generic.
+
+      - mode: "warning"
+        name: "Task 3 — OpenSpec cycle"
+        instructions: >
+          Check the PR includes an OpenSpec change under openspec/changes/<id>/ with
+          proposal.md, tasks.md and a spec delta (specs/<capability>/spec.md), plus an
+          implementation in packages/** and at least one test. PASS if proposal +
+          tasks + spec + some implementation are present.
+
+      - mode: "warning"
+        name: "Task 4 — A/B experiment"
+        instructions: >
+          Check the PR includes docs/ab-experiment.md with a comparison table filled
+          for 2 variants (two tools OR two models in one tool) and a short conclusion.
+          PASS if present and filled; FAIL if missing or empty.
+
+chat:
+  auto_reply: true
