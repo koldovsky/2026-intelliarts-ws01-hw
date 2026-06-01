@@ -61,9 +61,18 @@ reviews:
   path_instructions:
     - path: ".cursorignore"
       instructions: |
-        Task 1. Перевір: файл у корені, ≥ 5 розумних патернів для великого моноліту
-        (node_modules/, dist/, build/, coverage/, *.min.js, *.snap, lock-файли).
-        НЕ виключає core source (packages/**). Порожній — ❌.
+        Task 1 (варіант для Cursor). Перевір: файл у корені, ≥ 5 розумних патернів
+        для великого моноліту (node_modules/, dist/, build/, coverage/, *.min.js,
+        *.snap, lock-файли). НЕ виключає core source (packages/**). Порожній — ❌.
+        Примітка: для Claude Code еквівалент — `.claude/settings.json` (deny).
+
+    - path: ".claude/settings.json"
+      instructions: |
+        Task 1 (варіант для Claude Code — еквівалент .cursorignore; окремого
+        .claudeignore немає). Перевір: є `permissions.deny` з ≥ 5 правилами
+        `Read(...)` для node_modules/dist/build/coverage/*.min.js/*.snap/lock-файлів.
+        НЕ блокує core source (packages/**). Достатньо ОДНОГО з двох: цей файл АБО
+        `.cursorignore`.
 
     - path: "docs/memory/projectbrief.md"
       instructions: |
@@ -148,9 +157,12 @@ reviews:
 
     custom_checks:
       - mode: "warning"
-        name: "Task 1 — onboarding (.cursorignore + Memory Bank + docs)"
+        name: "Task 1 — onboarding (context limit + Memory Bank + docs)"
         instructions: >
-          Check the PR adds: (1) a root `.cursorignore` with 5+ meaningful patterns;
+          Check the PR adds: (1) a context limit with 5+ meaningful patterns —
+          EITHER a root `.cursorignore` (Cursor) OR `.claude/settings.json` with
+          `permissions.deny` `Read(...)` rules (Claude Code; there is no
+          `.claudeignore`); either one counts;
           (2) ALL THREE Memory Bank files docs/memory/{projectbrief,techContext,
           systemPatterns}.md, each >= 20 lines of structured Markdown;
           (3) docs/technical/architecture.md (recreated, since the repo ships no docs).
