@@ -2,27 +2,32 @@ import {
   BOUND_TEXT_PADDING,
   DEFAULT_FONT_SIZE,
   DEFAULT_FONT_FAMILY,
+  FONT_FAMILY,
   getFontString,
   isTestEnv,
   normalizeEOL,
 } from "@excalidraw/common";
 
 import type { FontString, ExcalidrawTextElement } from "./types";
+import { parseCodeBlock, getRenderableText } from "./textCodeBlock";
 
 export const measureText = (
   text: string,
   font: FontString,
   lineHeight: ExcalidrawTextElement["lineHeight"],
 ) => {
-  const _text = text
+  const codeBlock = parseCodeBlock(text);
+  const renderableText = getRenderableText(text);
+  const _text = renderableText
     .split("\n")
-    // replace empty lines with single space because leading/trailing empty
-    // lines would be stripped from computation
     .map((x) => x || " ")
     .join("\n");
   const fontSize = parseFloat(font);
+  const effectiveFont = codeBlock
+    ? getFontString({ fontFamily: FONT_FAMILY.Cascadia, fontSize })
+    : font;
   const height = getTextHeight(_text, fontSize, lineHeight);
-  const width = getTextWidth(_text, font);
+  const width = getTextWidth(_text, effectiveFont);
   return { width, height };
 };
 

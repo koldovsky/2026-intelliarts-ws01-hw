@@ -15,6 +15,7 @@ import {
   ELEMENT_READY_TO_ERASE_OPACITY,
   FRAME_STYLE,
   DARK_THEME_FILTER,
+  FONT_FAMILY,
   MIME_TYPES,
   THEME,
   distance,
@@ -53,6 +54,7 @@ import {
   getBoundTextMaxWidth,
 } from "./textElement";
 import { getLineHeightInPx } from "./textMeasurements";
+import { parseCodeBlock } from "./textCodeBlock";
 import {
   isTextElement,
   isLinearElement,
@@ -545,6 +547,39 @@ const drawElementOnCanvas = (
     }
     default: {
       if (isTextElement(element)) {
+        const codeBlock = parseCodeBlock(element.originalText ?? element.text);
+        if (codeBlock) {
+          context.save();
+          const padding = element.fontSize * 0.6;
+          context.fillStyle =
+            renderConfig.theme === THEME.DARK ? "#1e1e1e" : "#f5f5f5";
+          context.fillRect(0, 0, element.width, element.height);
+          context.font = getFontString({
+            fontFamily: FONT_FAMILY.Cascadia,
+            fontSize: element.fontSize,
+          });
+          context.fillStyle = applyDarkModeFilter(
+            element.strokeColor,
+            renderConfig.theme === THEME.DARK,
+          );
+          context.textAlign = "left";
+          const lines = codeBlock.code
+            .replace(/\r\n?/g, "\n")
+            .split("\n");
+          const lineHeightPx = getLineHeightInPx(
+            element.fontSize,
+            element.lineHeight,
+          );
+          for (let index = 0; index < lines.length; index++) {
+            context.fillText(
+              lines[index],
+              padding,
+              padding + index * lineHeightPx,
+            );
+          }
+          context.restore();
+          break;
+        }
         const rtl = isRTL(element.text);
         const shouldTemporarilyAttach = rtl && !context.canvas.isConnected;
         if (shouldTemporarilyAttach) {
