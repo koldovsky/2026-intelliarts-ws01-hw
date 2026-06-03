@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+dev-dist/
+
+# Test artifacts
+coverage/
+*.snap
+
+# Minified / binary assets
+*.min.js
+*.woff
+*.woff2
+*.ttf
+*.tgz
+
+# Lock files
+yarn.lock
+package-lock.json
+
+# Environment & IDE
+.env*
+.idea/
+.vscode/
+.vercel/
+.yarn/
+.eslintcache
+.DS_Store
+
+# CI / infra (not application logic)
+.github/
+.codesandbox/
+firebase-project/
+
+# Logs
+*.log
+logs/
