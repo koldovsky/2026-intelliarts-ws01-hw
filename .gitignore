@@ -26,4 +26,8 @@ coverage
 dev-dist
 html
 meta*.json
-.claude
+
+# Ignore everything under .claude except the shared, committed settings.
+# settings.local.json stays ignored (it holds machine-local allow rules / PIDs).
+.claude/*
+!.claude/settings.json
