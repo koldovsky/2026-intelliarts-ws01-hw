@@ -1,5 +1,30 @@
 # System Patterns
 
+```mermaid
+graph TD
+    App["App.tsx\n(React class component)"]
+    AppState["AppState\n(zoom, scroll, activeTool,\ncollaborators, currentItem*)"]
+    ActionManager["ActionManager\n(routes user events → actions)"]
+    Scene["Scene\nMap&lt;id, OrderedExcalidrawElement&gt;"]
+    Elements["Elements\n_ExcalidrawElementBase\n(immutable value objects)"]
+    ShapeCache["ShapeCache\n(roughjs geometry cache)"]
+    StaticCanvas["Static Canvas\nstaticScene.ts\n(grid, elements, frame clips)"]
+    InteractiveCanvas["Interactive Canvas\ninteractiveScene.ts\n(selection, handles, cursors)"]
+    SVGExport["SVG Export\nstaticSvgScene.ts"]
+
+    App --> AppState
+    App --> ActionManager
+    App --> Scene
+    ActionManager -- "ActionResult delta" --> App
+    Scene --> Elements
+    Elements --> ShapeCache
+    ShapeCache --> StaticCanvas
+    ShapeCache --> SVGExport
+    AppState --> InteractiveCanvas
+    Scene --> StaticCanvas
+    Scene --> InteractiveCanvas
+```
+
 ## Canvas Rendering
 
 Two stacked `<canvas>` elements:
