@@ -15,8 +15,8 @@ Intelliarts WS1 homework on the Excalidraw snapshot. Working through the five ta
 ## The selectSimilar slice
 
 - New action `actionSelectSimilar` (`packages/excalidraw/actions/actionSelectSimilar.ts`) selects every non-deleted, unlocked element whose type matches the current selection. Mirrors `actionSelectAll`.
-- Bound to Ctrl/Cmd+Shift+A; registered in the shortcut map and exposed via the command palette through `labels.selectSimilar`.
-- Covered by `actionSelectSimilar.test.tsx` (7 scenarios, including the keyboard path Ctrl/Cmd+Shift+A and the no-collision-with-Select-all case). The full `packages/excalidraw` suite (807 tests) is green; typecheck and ESLint pass.
+- Bound to Ctrl/Cmd+Shift+A and registered in the shortcut map with a `labels.selectSimilar` label. The spec also calls for command-palette discoverability; this slice ships the keyboard path and leaves the palette wiring (adding the action to the palette's curated list in `CommandPalette.tsx`) as the next step.
+- Covered by `actionSelectSimilar.test.tsx` (7 scenarios, including the keyboard path Ctrl/Cmd+Shift+A and the no-collision-with-Select-all case). Verified 2026-06-05: `yarn test:app --watch=false packages/excalidraw/actions/actionSelectSimilar.test.tsx` -> 7/7 passed, and `yarn test:typecheck` -> clean. The full `packages/excalidraw` suite (807 tests) runs green via `yarn test:all`.
 
 ## Active decisions
 

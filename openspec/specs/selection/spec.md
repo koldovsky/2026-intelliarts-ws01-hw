@@ -46,6 +46,11 @@ The command SHALL be triggerable by the keyboard shortcut Ctrl/Cmd+Shift+A and S
 - **WHEN** the user presses Ctrl/Cmd+Shift+A with at least one element selected
 - **THEN** the "Select similar" command runs and selects matching-type elements
 
+#### Scenario: Command palette invokes the command
+
+- **WHEN** the user opens the command palette and runs "Select similar" with at least one element selected
+- **THEN** the command runs and selects matching-type elements, using the same selection rules as the keyboard shortcut
+
 #### Scenario: Plain Ctrl/Cmd+A still selects all
 
 - **WHEN** the user presses Ctrl/Cmd+A without Shift
