@@ -1,7 +1,9 @@
 # export-webp Specification
 
 ## Purpose
-TBD - created by archiving change export-webp. Update Purpose after archive.
+
+Expose **Export to WebP** in the image export dialog so users can download smaller raster files than PNG while reusing the same export settings (background, padding, scale, light/dark mode). Shipped implementation follows the archived OpenSpec change `2026-06-03-export-webp`.
+
 ## Requirements
 ### Requirement: WebP export from image export dialog
 
@@ -36,4 +38,3 @@ The exported file SHALL use the WebP image format.
 
 - **WHEN** WebP export completes successfully
 - **THEN** the downloaded file uses MIME type `image/webp` and extension `.webp`
-

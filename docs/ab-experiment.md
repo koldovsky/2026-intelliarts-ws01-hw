@@ -12,7 +12,7 @@ Same Task 3 capability: **Export to WebP** from the image export dialog.
 - **`actionExport.tsx`:** Added `actionChangeExportWebPQuality` with label key `imageExportDialog.label.webpQuality` **missing from `en.json`**; extra `AppState.exportWebpQuality` not wired like other export actions.
 - **`ImageExportDialog.tsx`:** Hardcoded `"Export to WebP"` / `"WebP Quality"` instead of `t(...)`; custom quality slider + `supportsWebP()` gating; diverged from existing export dialog patterns.
 - **`utils/webp.ts`:** Parallel WebP helpers unused by the rest of the export stack.
-- **No** `exportCanvas.test.ts`; OpenSpec under `add-webp-export` only.
+- **No** `exportCanvas.test.ts`; separate OpenSpec change `add-webp-export` (not in final PR).
 
 ## Final implementation (Cursor)
 

@@ -2,14 +2,16 @@
 
 ## Current Focus
 
-WebP image export is implemented and validated via OpenSpec change `export-webp`.
+WS1 homework complete: **WebP image export** shipped on branch `mfranchuk/ws01-homework` (Cursor/OpenSpec implementation).
 
 ## Recent Changes
 
-- Added `EXPORT_IMAGE_TYPES.webp` and `ExportType` `"webp"`
-- `exportCanvas` WebP branch uses `canvasToBlob` with `image/webp` at quality 0.92
-- Image export dialog includes "Export to WebP" (`en.json` strings)
-- Tests: `packages/excalidraw/data/exportCanvas.test.ts`
+- `EXPORT_IMAGE_TYPES.webp`, `ExportType` `"webp"`, `exportCanvas` WebP branch (quality 0.92)
+- `ImageExportDialog` — "Export to WebP" with `en.json` keys
+- `packages/excalidraw/data/exportCanvas.test.ts` — MIME / `exportCanvas("webp")` coverage
+- OpenSpec archived: `openspec/changes/archive/2026-06-03-export-webp/`; main spec `openspec/specs/export-webp/spec.md`
+- Task 4: `docs/ab-experiment.md` (Cursor vs Claude; Cursor implementation kept)
+- Task 5: `docs/bmad-comparison.md`, `_bmad-output/` (installer `_bmad/`, `.agents/` gitignored)
 
 ## Export Pipeline (image formats)
 
@@ -17,12 +19,13 @@ WebP image export is implemented and validated via OpenSpec change `export-webp`
 |--------|-------|-------|
 | PNG | `exportCanvas("png")` | Optional embed-scene metadata |
 | SVG | `exportCanvas("svg")` | Vector |
-| WebP | `exportCanvas("webp")` | Raster; no embed-scene metadata |
+| WebP | `exportCanvas("webp")` | Raster; fixed quality 0.92; no embed-scene metadata |
 | Clipboard | `exportCanvas("clipboard")` | PNG to clipboard |
 
 Flow: `ImageExportDialog` → `App.onExportImage` → `exportCanvas` → `exportToCanvas` → `canvasToBlob`.
 
-## Next Steps
+## Deferred (non-goals)
 
-- Archive OpenSpec change `export-webp` after merge if not already archived locally
-- Consider non-English locale strings if product requires full i18n
+- WebP clipboard export
+- Scene embed metadata in WebP
+- Locales beyond `en.json`

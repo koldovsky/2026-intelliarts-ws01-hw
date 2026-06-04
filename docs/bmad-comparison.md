@@ -1,39 +1,37 @@
 # Task 5 — BMAD Quick Flow vs linear (OpenSpec) for WebP export
 
 Same capability: **Export to WebP** from the image export dialog.  
-Baseline: no WebP export (`39c84f5`).
+Brownfield baseline before either run: no WebP in `exportCanvas` or export dialog (`main` before WS1 commit).
 
 ## Approaches compared
 
-| | **Linear (OpenSpec)** | **BMAD Quick Flow** |
-|--|----------------------|---------------------|
-| **Workflow** | `proposal.md` → `design.md` → delta `spec.md` → `tasks.md` → implement → `openspec validate` → archive | `bmad-spec` → `SPEC.md` + companion → `bmad-quick-dev` → `export-webp.md` impl spec → implement → verify |
-| **Planning artifacts** | 4+ files under `openspec/changes/<change>/` (+ main spec after archive) | `SPEC.md` (5-field kernel) + `export-pipeline.md` + `export-webp.md` (tasks, AC, code map) under `_bmad-output/` |
-| **Reference in repo** | Cursor: commit `0e47bff` (archived `export-webp`) | This run: `_bmad-output/`, worktree branch `ws01/bmad-webp-experiment` |
-| **Code delta (impl only)** | ~141 LOC, 7 package files (same shape as BMAD worktree) | ~141 LOC, 7 package files |
-| **Tests** | Cursor/OpenSpec path: `exportCanvas.test.ts` | Included in BMAD impl spec tasks |
-| **Wall time (this run)** | See Task 4 (`docs/ab-experiment.md`) | ~5 min (install + SPEC + impl spec + worktree impl; Node 22 via Homebrew for installer) |
+| | **Linear (OpenSpec + Cursor)** | **BMAD Quick Flow** |
+|--|-------------------------------|---------------------|
+| **Workflow** | `proposal.md` → `design.md` → delta `spec.md` → `tasks.md` → implement → `openspec validate` → archive | `bmad-spec` → `SPEC.md` + companion → `bmad-quick-dev` → `export-webp.md` impl spec → implement (same slice) |
+| **Planning artifacts** | `openspec/changes/archive/2026-06-03-export-webp/` + `openspec/specs/export-webp/spec.md` | `_bmad-output/planning-artifacts/specs/spec-export-webp/` + `_bmad-output/implementation-artifacts/export-webp.md` |
+| **Shipped in PR** | Yes — final WebP code on `mfranchuk/ws01-homework` | Artifacts only; code path matches OpenSpec impl (~7 files, ~140 LOC) |
+| **Tests** | `exportCanvas.test.ts` in PR | Spec tasks require same test; validated in OpenSpec path |
+| **Wall time** | See `docs/ab-experiment.md` (~1–2 min Cursor for impl pass) | ~5 min (install + SPEC + impl spec; Node ≥ 20.12) |
 
 ## Process differences
 
-- **OpenSpec** — requirement scenarios (WHEN/THEN), explicit change folder, `openspec validate`, archive to `openspec/specs/`.
-- **BMAD** — SPEC kernel (Why, Capabilities, Constraints, Non-goals, Success signal), frozen intent block in impl spec, code map + task checklist, optional adversarial review step (`bmad-review-adversarial-general`).
+- **OpenSpec** — WHEN/THEN requirements, `openspec validate`, archive to `openspec/specs/`.
+- **BMAD** — SPEC kernel (Why, Capabilities, Constraints, Non-goals, Success signal), frozen intent in impl spec, code map + AC checklist.
 
-## Outcome quality (same brownfield task)
+## Outcome quality
 
-| Criterion | Linear (Cursor `0e47bff`) | BMAD (this run) |
-|-----------|---------------------------|-----------------|
-| Fits assignment slice | Yes — button + pipeline + tests + `en.json` | Yes — same minimal slice per SPEC |
-| Scope creep | Low (Cursor) / higher (Claude: quality slider, no tests) | Low — Non-goals enforced in SPEC |
-| Traceability | OpenSpec delta + archive | SPEC + impl spec + `.decision-log` pattern (spec folder) |
-| Repo noise | Main spec + archive dir | `_bmad-output/` only (installer not in git) |
+| Criterion | OpenSpec (shipped) | BMAD (this run) |
+|-----------|-------------------|------------------|
+| Assignment fit | Yes — archive, main spec, tests, `en.json` | Yes — same minimal slice in SPEC non-goals |
+| Scope creep | Low | Low — non-goals block quality slider / clipboard |
+| Repo footprint | Archive + main spec + code | `_bmad-output/` only (`_bmad/`, `.agents/` gitignored) |
 
 ## Conclusion
 
-- **Same feature, similar code** when both follow the PNG export pattern (~7 files, ~140 LOC).
-- **Linear/OpenSpec** fits WS1 Task 3 checklist (validate, archive, Memory Bank) in one toolchain already used in the repo.
-- **BMAD Quick Flow** adds a structured **SPEC kernel** and **implementation spec** with frozen intent and AC; good when you want one folder contract (`_bmad-output/`) and skill-driven steps without maintaining OpenSpec YAML.
-- **Pick OpenSpec** for homework DoD and CodeRabbit OpenSpec checks; **pick BMAD** for guided quick features with built-in review/defer workflow when the team standardizes on `_bmad`.
+- **Same feature, similar code** when both follow the PNG export pattern.
+- **OpenSpec** fits WS1 Task 3 DoD and CodeRabbit checks; **shipped implementation** uses this path (Cursor).
+- **BMAD** adds a compact contract under `_bmad-output/` and skill-driven steps; reinstall tooling with `npx bmad-method` (not committed).
+- **Pick OpenSpec** for homework grading; **pick BMAD** when the team wants SPEC kernel + quick-dev without OpenSpec YAML.
 
 ## Reproduce BMAD locally
 
@@ -43,4 +41,4 @@ Requires **Node.js ≥ 20.12**. From repo root:
 npx bmad-method install --yes --directory . --modules bmm --tools cursor
 ```
 
-Creates `_bmad/` and `.agents/skills/` (gitignored). Artifacts from this run are under `_bmad-output/`.
+Creates `_bmad/` and `.agents/skills/` (gitignored). Run artifacts from this homework are under `_bmad-output/`.
