@@ -8,7 +8,7 @@ import {
 } from "@excalidraw/element";
 import { getFrameChildren } from "@excalidraw/element";
 
-import { KEYS, updateActiveTool } from "@excalidraw/common";
+import { CODES, KEYS, updateActiveTool } from "@excalidraw/common";
 
 import { getElementsInGroup } from "@excalidraw/element";
 
@@ -164,6 +164,11 @@ export const actionWrapSelectionInFrame = register({
   name: "wrapSelectionInFrame",
   label: "labels.wrapSelectionInFrame",
   trackEvent: { category: "element" },
+  keyTest: (event) =>
+    event[KEYS.CTRL_OR_CMD] &&
+    event.shiftKey &&
+    !event.altKey &&
+    event.code === CODES.F,
   predicate: (elements, appState, _, app) => {
     const selectedElements = getSelectedElements(elements, appState);
 
