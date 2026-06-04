@@ -26,7 +26,7 @@ Baseline: no WebP export (`39c84f5`).
 | Fits assignment slice | Yes — button + pipeline + tests + `en.json` | Yes — same minimal slice per SPEC |
 | Scope creep | Low (Cursor) / higher (Claude: quality slider, no tests) | Low — Non-goals enforced in SPEC |
 | Traceability | OpenSpec delta + archive | SPEC + impl spec + `.decision-log` pattern (spec folder) |
-| Repo noise | Main spec + archive dir | `_bmad-output/` + `_bmad/` + `.agents/skills/` (installer) |
+| Repo noise | Main spec + archive dir | `_bmad-output/` only (installer not in git) |
 
 ## Conclusion
 
@@ -35,4 +35,12 @@ Baseline: no WebP export (`39c84f5`).
 - **BMAD Quick Flow** adds a structured **SPEC kernel** and **implementation spec** with frozen intent and AC; good when you want one folder contract (`_bmad-output/`) and skill-driven steps without maintaining OpenSpec YAML.
 - **Pick OpenSpec** for homework DoD and CodeRabbit OpenSpec checks; **pick BMAD** for guided quick features with built-in review/defer workflow when the team standardizes on `_bmad`.
 
-Implementation for the BMAD run lives on git worktree branch `ws01/bmad-webp-experiment` (not merged into `mfranchuk/ws01-homework`, which retains the Claude OpenSpec implementation).
+## Reproduce BMAD locally
+
+Requires **Node.js ≥ 20.12**. From repo root:
+
+```bash
+npx bmad-method install --yes --directory . --modules bmm --tools cursor
+```
+
+Creates `_bmad/` and `.agents/skills/` (gitignored). Artifacts from this run are under `_bmad-output/`.
