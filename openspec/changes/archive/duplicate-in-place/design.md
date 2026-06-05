@@ -25,7 +25,7 @@ Mirrors the minimal-scope principle: the action is accessible via keyboard. A to
 ```text
 User presses Ctrl+Shift+D
   → ActionManager dispatches actionDuplicateInPlace
-    → duplicateElements({ type: "in-place", overrides: () => ({}) })
+    → duplicateElements({ type: "in-place" })
       → Returns { duplicatedElements, elementsWithDuplicates }
     → syncMovedIndices() to fix fractional indices
     → Returns { elements, appState (with duplicated elements selected) }
