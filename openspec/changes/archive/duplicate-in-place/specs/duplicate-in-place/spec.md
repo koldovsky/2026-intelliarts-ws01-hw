@@ -6,39 +6,20 @@
 **Shortcut:** `Ctrl+Shift+D` / `Cmd+Shift+D`  
 **Category:** element
 
-## Behaviour
+## ADDED Requirements
 
-### Pre-conditions
-
-- One or more non-deleted, non-locked elements are selected
-- The editor is not in linear-element point-editing mode (`appState.selectedLinearElement?.isEditing` is false)
-
-### Action
-
-1. Duplicate all selected elements (including bound text elements and elements inside selected frames) using `duplicateElements({ type: "in-place" })` with no positional override
-2. The duplicated elements appear at exactly the same coordinates as the originals
-3. After duplication, the selection shifts to the newly created duplicates
-4. The operation is immediately undoable
-
-### Post-conditions
-
-- `appState.selectedElementIds` contains only the IDs of the newly duplicated elements
-- The original elements remain at their original positions, unmodified
-- The duplicated elements are at the same position as the originals
-- `CaptureUpdateAction.IMMEDIATELY` is used so the action is on the undo stack
-
-### Edge cases
-
-| Condition | Expected result |
-|---|---|
-| Nothing selected | `perform` returns `false` (no-op) |
-| Linear element in point-editing mode | `perform` returns `false` (no-op) |
-| Elements being dragged | `perform` returns `false` (no-op) |
-| Frame selected | Frame and its children are duplicated in place |
+- **REQ-DIP-01:** `duplicateInPlace` SHALL only execute when one or more non-deleted, non-locked elements are selected; if `selectedElementIds` is empty the action SHALL return `false` without modifying state.
+- **REQ-DIP-02:** `duplicateInPlace` SHALL return `false` when `appState.selectedLinearElement?.isEditing` is `true`.
+- **REQ-DIP-03:** `duplicateInPlace` SHALL return `false` when `appState.selectedElementsAreBeingDragged` is `true`.
+- **REQ-DIP-04:** `duplicateInPlace` SHALL call `duplicateElements({ type: "in-place" })` with no positional override, so each duplicate's `x` and `y` equal those of its original.
+- **REQ-DIP-05:** `duplicateInPlace` SHALL include bound text elements and elements inside selected frames in the duplication set (via `includeBoundTextElement: true, includeElementsInFrames: true`).
+- **REQ-DIP-06:** After duplication, `appState.selectedElementIds` SHALL contain only the IDs of the newly created duplicates; original elements SHALL remain unselected and at their original positions.
+- **REQ-DIP-07:** `duplicateInPlace` SHALL use `CaptureUpdateAction.IMMEDIATELY` so the operation is a discrete, immediately undoable entry on the history stack.
+- **REQ-DIP-08:** When a frame is selected, `duplicateInPlace` SHALL duplicate the frame and all its children in place, preserving `frameId` references on child duplicates.
 
 ## Keyboard binding
 
-```
+```ts
 keyTest: (event) =>
   event[KEYS.CTRL_OR_CMD] &&
   event.shiftKey &&

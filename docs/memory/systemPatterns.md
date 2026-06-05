@@ -29,13 +29,13 @@ Changes flow through `Store` (`packages/element/src/store.ts`):
 3. Store creates a `StoreDelta` (= `ElementsDelta` + `AppStateDelta`) from the diff
 4. `History` wraps `StoreDelta` as `HistoryDelta` and pushes to the undo stack
 
-`StoreDelta.applyTo()` replays a delta forward or backward, enabling undo/redo and collaborative reconciliation.
+`HistoryDelta.applyTo()` replays a delta forward or backward, applying changes to elements and `AppState` to drive undo/redo.
 
 ## Action system
 
 All user-triggered operations are `Action` objects registered via `register.ts` in `packages/excalidraw/actions/`. An action has:
 - `name` — unique string key
-- `perform(elements, appState, formData, app)` — returns `{ elements?, appState?, commitToHistory }` 
+- `perform(elements, appState, formData, app)` — returns `{ elements?, appState?, captureUpdate }` 
 - Optional `keyTest` for keyboard binding
 - Optional `PanelComponent` for toolbar UI
 

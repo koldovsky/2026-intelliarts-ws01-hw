@@ -4,7 +4,7 @@
 
 Imports must flow strictly upward in the dependency stack. Never import from a higher-level package:
 
-```
+```text
 math  ←  common  ←  fractional-indexing  ←  element  ←  excalidraw  ←  excalidraw-app
 ```
 

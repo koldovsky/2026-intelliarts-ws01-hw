@@ -22,7 +22,7 @@ Mirrors the minimal-scope principle: the action is accessible via keyboard. A to
 
 ## Data flow
 
-```
+```text
 User presses Ctrl+Shift+D
   → ActionManager dispatches actionDuplicateInPlace
     → duplicateElements({ type: "in-place", overrides: () => ({}) })
