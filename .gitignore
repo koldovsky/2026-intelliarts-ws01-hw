@@ -27,3 +27,6 @@ dev-dist
 html
 meta*.json
 .claude
+.worktree/
+openspec/changes/*/runs/CHANGE-REVIEW.json
+openspec/changes/*/runs/CHANGE-VERIFY.json
