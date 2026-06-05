@@ -1,0 +1,9 @@
+node_modules/
+dist/
+build/
+coverage/
+*.min.js
+*.snap
+yarn.lock
+package-lock.json
+dev-dist/
