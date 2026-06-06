@@ -35,6 +35,10 @@ The `fenced-code-blocks-in-text` OpenSpec change is **completed and archived**. 
 | Visual verification          | ✅ User confirmed code block styling visible |
 | `openspec validate --strict` | ✅ Passes                                   |
 
+## Related
+
+- **PR #2**: [`WS1: a-shutka — fenced-code-blocks-in-text`](https://github.com/koldovsky/2026-intelliarts-ws01-hw/pull/2) — implementation commit: `cbc3d3c`
+
 ## Nearby Files & Patterns
 
 - `packages/element/src/textCodeBlock.ts` exports `parseCodeBlock(text)` and `getRenderableText(text)`

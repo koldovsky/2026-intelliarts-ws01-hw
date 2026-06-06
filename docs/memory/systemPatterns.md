@@ -27,7 +27,7 @@ The editor uses three overlapping `<canvas>` elements for separation of concerns
 
 Defined in `packages/element/src/store.ts`:
 
-```
+```text
 Store (per App instance)
   ├── snapshot: StoreSnapshot
   │     ├── elements: SceneElementsMap
@@ -94,14 +94,16 @@ Memory-efficient because it stores deltas, not full snapshots.
 
 ## 9. Dependency Graph
 
-```
-@excalidraw/common  ──────────────────────────┐
-    ↑                                         │
-@excalidraw/math  ──── @excalidraw/element  ──┤
-    ↑                     ↑                    │
-@excalidraw/fractional-indexing               │
-                          ↑                    │
-                 @excalidraw/excalidraw  ◄─────┘
-                          ↑
-                 excalidraw-app
+```mermaid
+flowchart TD
+    common["@excalidraw/common"]
+    math["@excalidraw/math"]
+    fi["@excalidraw/fractional-indexing"]
+    element["@excalidraw/element"]
+    excalidraw["@excalidraw/excalidraw"]
+    app["excalidraw-app"]
+
+    common --> math --> element --> excalidraw --> app
+    fi --> element
+    common --> excalidraw
 ```

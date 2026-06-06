@@ -1,10 +1,12 @@
 # Technical Architecture — Excalidraw Monorepo
 
+> **See also:** [`docs/memory/activeContext.md`](../memory/activeContext.md) — status of the `fenced-code-blocks-in-text` feature (parser, measurement, rendering)
+
 ## 1. High-Level Architecture
 
 ### Monorepo Layout
 
-```
+```text
 excalidraw-monorepo/
 ├── excalidraw-app/           # Hosted application (excalidraw.com wrapper)
 ├── packages/
@@ -22,18 +24,19 @@ excalidraw-monorepo/
 
 ### Package Dependency Graph
 
-```
-@excalidraw/common  ──────────────────────────────────────────┐
-    ↑                                                        │
-@excalidraw/math  ────── @excalidraw/element  ───────────────┤
-    ↑                        ↑                               │
-@excalidraw/fractional-indexing                              │
-                             ↑                               │
-                    @excalidraw/excalidraw  ◄─────────────────┘
-                             ↑
-                    excalidraw-app
+```mermaid
+flowchart TD
+    common["@excalidraw/common"]
+    math["@excalidraw/math"]
+    fi["@excalidraw/fractional-indexing"]
+    element["@excalidraw/element"]
+    excalidraw["@excalidraw/excalidraw"]
+    app["excalidraw-app"]
+    utils["@excalidraw/utils"]
 
-@excalidraw/utils           (standalone, no internal deps)
+    common --> math --> element --> excalidraw --> app
+    fi --> element
+    common --> excalidraw
 ```
 
 Each layer depends only on layers below it, forming a strict directed acyclic graph.
@@ -42,7 +45,7 @@ Each layer depends only on layers below it, forming a strict directed acyclic gr
 
 **Main package entry** (`packages/excalidraw/index.tsx`):
 
-```
+```text
 Excalidraw (React.memo wrapper)
   └── ExcalidrawBase
        └── <EditorJotaiProvider>            (isolated Jotai store)
@@ -59,7 +62,7 @@ Excalidraw (React.memo wrapper)
 
 **App entry** (`excalidraw-app/index.tsx`):
 
-```
+```text
 ExcalidrawApp
   └── ExcalidrawWrapper
        └── <Excalidraw> (from @excalidraw/excalidraw)
@@ -84,29 +87,26 @@ ExcalidrawApp
 
 ### User Input → State → Rendering Pipeline
 
-```
-User Event (mouse/keyboard/touch)
-    │
-    ▼
-App event handlers (handleCanvasPointerMove, handleCanvasPointerDown, onKeyDown, etc.)
-    │
-    ├──► this.setState(appState)          ─── immediate UI changes
-    │         │                                  │
-    │         ▼                                  ▼
-    │    React re-render (render())     Canvas re-draw (RAF)
-    │
-    ├──► this.scene.mutateElement()      ─── element geometry changes
-    │         │
-    │         ▼
-    │    scene.triggerUpdate() → store.commit() → delta calculated
-    │         │
-    │         ▼
-    │    DurableIncrement / EphemeralIncrement emitted → onChange callback
-    │
-    └──► this.store.scheduleCapture()    ─── undo history
-              │
-              ▼
-         History.record(delta)
+```mermaid
+flowchart TD
+    event["User Event (mouse/keyboard/touch)"]
+    handler["App event handlers (handleCanvasPointerMove, handleCanvasPointerDown, onKeyDown, etc.)"]
+
+    event --> handler
+
+    handler -->|immediate UI| setState["this.setState(appState)"]
+    setState --> reRender["React re-render (render())"]
+    setState --> canvasRedraw["Canvas re-draw (RAF)"]
+
+    handler -->|element geometry| mutate["this.scene.mutateElement()"]
+    mutate --> trigger["scene.triggerUpdate()"]
+    trigger --> commit["store.commit()"]
+    commit --> delta["delta calculated"]
+    delta --> increment["DurableIncrement / EphemeralIncrement"]
+    increment --> onChange["onChange callback"]
+
+    handler -->|undo history| capture["this.store.scheduleCapture()"]
+    capture --> history["History.record(delta)"]
 ```
 
 ### Element Creation Flow
@@ -133,22 +133,25 @@ Key files: `packages/excalidraw/components/App.tsx`, `packages/element/src/newEl
 
 ### Collaboration Data Flow
 
-```
-User clicks "Share" → Collab.startCollaboration()
-    │
-    ├──► Generate room ID + AES-GCM encryption key
-    ├──► Portal.open() → socket.io connection
-    ├──► Broadcast SCENE.INIT → all elements (encrypted, compressed)
-    └──► Listen for remote updates
-              │
-              ▼
-    Socket receives SCENE_UPDATE / SCENE_INIT
-         │
-         ▼
-    Collab receives → decrypt → reconcileElements(local, remote, appState)
-         │
-         ▼
-    excalidrawAPI.updateScene() with reconciled elements
+```mermaid
+flowchart TD
+    share["User clicks Share"]
+    collab["Collab.startCollaboration()"]
+    room["Generate room ID + AES-GCM encryption key"]
+    portal["Portal.open() → socket.io connection"]
+    broadcast["Broadcast SCENE.INIT (encrypted, compressed)"]
+    listen["Listen for remote updates"]
+    socket["Socket receives SCENE_UPDATE / SCENE_INIT"]
+    decrypt["Decrypt"]
+    reconcile["reconcileElements(local, remote, appState)"]
+    update["excalidrawAPI.updateScene()"]
+
+    share --> collab
+    collab --> room
+    collab --> portal
+    portal --> broadcast
+    portal --> listen
+    listen --> socket --> decrypt --> reconcile --> update
 ```
 
 Key files:
@@ -162,7 +165,7 @@ Key files:
 
 **Local auto-save**:
 
-```
+```text
 onChange() → LocalData.save(elements, appState, files)
   ├── localStorage: saveDataStateToLocalStorage()
   │     → elements (non-deleted) + appState → JSON
@@ -172,7 +175,7 @@ onChange() → LocalData.save(elements, appState, files)
 
 **Local restore**:
 
-```
+```text
 initializeScene() → importFromLocalStorage()
   → restoreElements() (validate, repair bindings, migrate)
   → restoreAppState() (merge with defaults, migrate legacy)
@@ -182,7 +185,7 @@ initializeScene() → importFromLocalStorage()
 
 **Backend export** (shareable link):
 
-```
+```text
 exportToBackend()
   → compressData(serializeAsJSON(elements, appState))
   → compress (pako deflate) + encrypt (AES-GCM)
@@ -233,19 +236,28 @@ The main `App` class component exposes state through React Context:
 
 ### Store + Snapshot Delta System (`packages/element/src/store.ts`)
 
-```
-Store (per App instance)
-  ├── snapshot: StoreSnapshot
-  │     ├── elements: SceneElementsMap
-  │     ├── appState: ObservedAppState
-  │     └── metadata (didElementsChange, didAppStateChange)
-  │
-  ├── commit()
-  │     ├── flushMicroActions()
-  │     ├── processAction() → StoreChange + StoreDelta
-  │     └── emit StoreIncrement (Durable or Ephemeral)
-  │
-  └── scheduleMicroAction()  (fine-grained batching)
+```mermaid
+flowchart TD
+    store["Store (per App instance)"]
+    snapshot["snapshot: StoreSnapshot"]
+    elements["elements: SceneElementsMap"]
+    appState["appState: ObservedAppState"]
+    metadata["metadata (didElementsChange, didAppStateChange)"]
+    commit["commit()"]
+    flush["flushMicroActions()"]
+    process["processAction()"]
+    change["StoreChange + StoreDelta"]
+    emit["emit StoreIncrement (Durable or Ephemeral)"]
+    micro["scheduleMicroAction() (fine-grained batching)"]
+
+    store --> snapshot
+    snapshot --> elements
+    snapshot --> appState
+    snapshot --> metadata
+    store --> commit
+    commit --> flush
+    commit --> process --> change --> emit
+    store --> micro
 ```
 
 **CaptureUpdateAction** enum controls when an increment is recorded:
@@ -256,19 +268,23 @@ Store (per App instance)
 
 ### Undo / Redo (`packages/excalidraw/history.ts`)
 
-```
-History (per App instance)
-  ├── undoStack: HistoryDelta[]
-  ├── redoStack: HistoryDelta[]
-  │
-  ├── record(delta)       ← called on DurableIncrement
-  │     → creates inverse delta, pushes to undoStack, clears redoStack
-  │
-  ├── undo()              → creates redo entry, applies delta
-  │     → returns [nextElements, nextAppState]
-  │
-  └── redo()              → creates undo entry, applies delta
-        → returns [nextElements, nextAppState]
+```mermaid
+flowchart TD
+    history["History (per App instance)"]
+    undo["undoStack: HistoryDelta[]"]
+    redo["redoStack: HistoryDelta[]"]
+    record["record(delta)"]
+    recordAction["creates inverse delta, pushes to undoStack, clears redoStack"]
+    undoAction["undo()"]
+    undoResult["returns (nextElements, nextAppState)"]
+    redoAction["redo()"]
+    redoResult["returns (nextElements, nextAppState)"]
+
+    history --> undo
+    history --> redo
+    history --> record --> recordAction
+    history --> undoAction --> undoResult
+    history --> redoAction --> redoResult
 ```
 
 Deltas exclude `version` and `versionNonce` (always generated fresh). The system iterates through multiple stacked entries until a `visibleChange` is found.
@@ -313,31 +329,43 @@ The `Renderer` uses `memoize` to cache results based on:
 
 ### Static Scene Rendering (`renderer/staticScene.ts`)
 
-```
-renderStaticScene(canvas, rc, scale, elementsMap, allElementsMap, visibleElements, appState, renderConfig)
-  ├── Clear canvas, set DPR transform
-  ├── Fill view background color
-  ├── strokeGrid() — draw grid if enabled
-  ├── For each visible element:
-  │     └── renderElement() (from @excalidraw/element)
-  │           → roughjs for hand-drawn appearance
-  │           → ShapeCache for cached rough shapes
-  ├── Frame clipping masks
-  ├── Eraser effect (dimming elements under eraser)
-  └── Frame-name labels
+```mermaid
+flowchart TD
+    start["renderStaticScene(canvas, rc, scale, elementsMap, ...)"]
+    clear["Clear canvas, set DPR transform"]
+    fill["Fill view background color"]
+    grid["strokeGrid() — draw grid if enabled"]
+    loop["For each visible element:"]
+    render["renderElement() (from @excalidraw/element)"]
+    rough["roughjs for hand-drawn appearance"]
+    cache["ShapeCache for cached rough shapes"]
+    frames["Frame clipping masks"]
+    eraser["Eraser effect (dimming elements under eraser)"]
+    labels["Frame-name labels"]
+
+    start --> clear --> fill --> grid
+    grid --> loop
+    loop --> render
+    render --> rough
+    render --> cache
+    loop --> frames --> eraser --> labels
 ```
 
 ### Interactive Scene Rendering (`renderer/interactiveScene.ts`)
 
-```
-renderInteractiveScene(canvas, rc, scale, elementsMap, visibleElements, selectedElements, appState, ...)
-  ├── Selection rubber-band box
-  ├── Transform handles on selected elements
-  ├── Resize handles
-  ├── Binding indicators (arrow focus points)
-  ├── Collaborator cursors/pointers
-  ├── Scrollbars
-  └── Element overlays (link icons, etc.)
+```mermaid
+flowchart TD
+    start["renderInteractiveScene(canvas, rc, scale, elementsMap, ...)"]
+    rubber["Selection rubber-band box"]
+    transform["Transform handles on selected elements"]
+    resize["Resize handles"]
+    binding["Binding indicators (arrow focus points)"]
+    cursors["Collaborator cursors/pointers"]
+    scrollbars["Scrollbars"]
+    overlays["Element overlays (link icons, etc.)"]
+
+    start --> rubber --> transform --> resize
+    resize --> binding --> cursors --> scrollbars --> overlays
 ```
 
 ### Element-Level Rendering (`packages/element/src/renderElement.ts`)

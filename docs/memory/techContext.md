@@ -50,7 +50,7 @@ yarn typecheck             # tsc (in root)
 - **Node**: >= 18.0.0
 - **Port**: 3001 (dev server)
 - **No .env required** for development — `.env.development` and `.env.production` are provided
-- **Context limiting**: `.cursorignore` in project root (30 patterns)
+- **Context limiting**: `.cursorignore` in project root
 
 ## Build Output
 

@@ -33,3 +33,14 @@ logs
 *.swp
 *.swo
 
+# Lockfiles (prevent noisy context)
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+*.min.js
+
+# Source directories (not needed for AI context)
+scripts
+.github
+firebase-project
+

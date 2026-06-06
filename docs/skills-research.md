@@ -15,13 +15,14 @@
 
 **Files touched (typical)**: 4–7 files across 2 packages
 
-## Skill 2: "Run verification suite"
+## Skill 2: "Validate canvas export workflows"
 
-**Why**: Multiple verify steps are needed before committing. A single command chain with error feedback is faster than running each manually.
+**Why**: Excalidraw has a complex export pipeline (PNG metadata embedding, SVG generation, clipboard copy, backend shareable links) with multiple code paths that are easy to break. A dedicated workflow catches export regressions faster than generic typecheck + test.
 
 **Workflow automated**:
 
-1. `yarn lint` — check for lint errors
-2. `yarn typecheck` — verify TypeScript compilation
-3. `yarn test:coverage` — run tests with coverage report
-4. Report summary: pass/fail per step, coverage delta, actionable errors
+1. Locate relevant export tests in `packages/excalidraw/tests/` (export tests use `render` + snapshot matching)
+2. `yarn test:code` — check for ESLint errors
+3. `yarn typecheck` — verify TypeScript compilation
+4. `yarn test -- --run packages/excalidraw/tests/export*.test.tsx` — run export-specific tests
+5. Verify export output: PNG chunk extraction, SVG DOM structure, clipboard DataTransfer content
