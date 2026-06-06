@@ -37,7 +37,7 @@ The `fenced-code-blocks-in-text` OpenSpec change is **completed and archived**. 
 
 ## Related
 
-- **PR #2**: [`WS1: a-shutka — fenced-code-blocks-in-text`](https://github.com/koldovsky/2026-intelliarts-ws01-hw/pull/2) — implementation commit: `cbc3d3c`
+- **PR #2**: [`WS1: a-shutka - Fix for Excalidraw issue 11340 fenced-code-blocks-in-text`](https://github.com/koldovsky/2026-intelliarts-ws01-hw/pull/2) — implementation commit: `cbc3d3c`
 
 ## Nearby Files & Patterns
 
