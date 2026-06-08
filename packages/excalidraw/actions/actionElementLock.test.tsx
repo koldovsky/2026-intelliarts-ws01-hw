@@ -96,8 +96,8 @@ describe("element locking", () => {
     expect(h.elements.map((el) => el.locked)).toEqual([true, false]);
 
     Keyboard.withModifierKeys({ ctrl: true, shift: true }, () => {
-      Keyboard.keyDown("U");
-      Keyboard.keyUp("U");
+      Keyboard.keyDown("u");
+      Keyboard.keyUp("u");
     });
 
     expect(h.elements.map((el) => el.locked)).toEqual([false, false]);
