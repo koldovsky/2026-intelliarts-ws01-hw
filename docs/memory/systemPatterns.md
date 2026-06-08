@@ -219,7 +219,7 @@ Sits between `App` and the render functions. Computes visible elements and `Rend
 
 Base fields (all `Readonly`):
 
-```
+```text
 id, x, y, width, height, angle: Radians
 strokeColor, backgroundColor, fillStyle, strokeWidth, strokeStyle, roughness, roundness, opacity
 seed, version, versionNonce, index: FractionalIndex | null
