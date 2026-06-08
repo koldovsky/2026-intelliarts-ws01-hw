@@ -235,20 +235,29 @@ export const loadLibraryFromBlob = async (
 
 export const canvasToBlob = async (
   canvas: HTMLCanvasElement | Promise<HTMLCanvasElement>,
+  mimeType: string = MIME_TYPES.png,
+  quality?: number,
 ): Promise<Blob> => {
   return new Promise(async (resolve, reject) => {
     try {
       if (isPromiseLike(canvas)) {
         canvas = await canvas;
       }
-      canvas.toBlob((blob) => {
-        if (!blob) {
-          return reject(
-            new CanvasError("Error: Canvas too big", "CANVAS_POSSIBLY_TOO_BIG"),
-          );
-        }
-        resolve(blob);
-      });
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            return reject(
+              new CanvasError(
+                "Error: Canvas too big",
+                "CANVAS_POSSIBLY_TOO_BIG",
+              ),
+            );
+          }
+          resolve(blob);
+        },
+        mimeType,
+        quality,
+      );
     } catch (error: any) {
       reject(error);
     }

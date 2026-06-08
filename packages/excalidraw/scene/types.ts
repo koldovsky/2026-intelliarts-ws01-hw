@@ -128,6 +128,7 @@ export type SceneScroll = {
 
 export type ExportType =
   | "png"
+  | "webp"
   | "clipboard"
   | "clipboard-svg"
   | "backend"

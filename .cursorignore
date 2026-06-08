@@ -1,0 +1,60 @@
+# Excalidraw monorepo — limit AI context to editable source.
+# Keep packages/** indexed; exclude noise below.
+
+# --- Dependencies and build artifacts ---
+node_modules/
+dist/
+build/
+coverage/
+*.min.js
+*.snap
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+
+# --- Build & generated output ---
+dev-dist/
+packages/excalidraw/types/
+html/
+meta*.json
+
+# --- Dependencies & caches ---
+node_modules/
+.yarn/
+*.tgz
+
+# --- Test artifacts (keep *.test.* source for patterns) ---
+**/__snapshots__/
+packages/excalidraw/tests/fixtures/
+
+# --- i18n bulk (~57 locale files); keep English source strings ---
+packages/excalidraw/locales/*.json
+!packages/excalidraw/locales/en.json
+
+# --- Embedded WASM / font binaries (large, not human-edited) ---
+packages/excalidraw/subset/woff2/woff2-bindings.ts
+packages/excalidraw/subset/harfbuzz/harfbuzz-bindings.ts
+*.sfd
+*.wasm
+
+# --- CI, deployment, infra (not app logic) ---
+.github/
+firebase-project/
+firebase/
+.vercel/
+.codesandbox/
+Dockerfile
+docker-compose.yml
+vercel.json
+
+# --- Local env, logs, editor ---
+.env*
+.envrc
+*.log
+.eslintcache
+.history/
+.idea/
+.vscode/
+.DS_Store
+.claude/
+.husky/

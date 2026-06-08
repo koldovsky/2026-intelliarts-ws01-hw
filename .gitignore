@@ -27,3 +27,8 @@ dev-dist
 html
 meta*.json
 .claude
+repomix-output.xml
+
+# BMAD installer (regenerate: npx bmad-method install --yes --modules bmm --tools cursor)
+_bmad/
+.agents/
