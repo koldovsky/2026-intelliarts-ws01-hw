@@ -1,10 +1,10 @@
 # AGENTS.md
 
-Project-specific operating rules for AI coding agents working in this repository. These rules are derived from the actual config and codebase — follow them exactly. For deeper context read [`docs/technical/architecture.md`](docs/technical/architecture.md) and the memory bank in [`docs/memory/`](docs/memory/).
+Project-specific operating rules for AI coding agents working in this repository. These rules are derived from the actual config and codebase — follow them exactly. For deeper context read [`docs/technical/architecture.md`](docs/technical/architecture.md) and the memory bank: [`docs/memory/projectbrief.md`](docs/memory/projectbrief.md), [`docs/memory/systemPatterns.md`](docs/memory/systemPatterns.md), [`docs/memory/techContext.md`](docs/memory/techContext.md).
 
 ## What this project is
 
-Excalidraw — a TypeScript **Yarn-1 workspaces monorepo**. A deployable app (`excalidraw-app/`) consumes an embeddable, environment-agnostic editor library (`@excalidraw/excalidraw`), which is built on the layered packages under `packages/*`. See architecture doc for the full picture.
+Excalidraw — a TypeScript **Yarn-1 workspaces monorepo**. A deployable app (`excalidraw-app/`) consumes an embeddable, environment-agnostic editor library (`@excalidraw/excalidraw`), which is built on the layered packages under `packages/*`. See [`docs/technical/architecture.md`](docs/technical/architecture.md) for the full picture.
 
 ## Setup & commands
 
@@ -22,7 +22,7 @@ Excalidraw — a TypeScript **Yarn-1 workspaces monorepo**. A deployable app (`e
 
 These come from [`.eslintrc.json`](.eslintrc.json) and [`packages/eslintrc.base.json`](packages/eslintrc.base.json). Violations are **errors**, not warnings.
 
-1. **Never import `jotai` directly.** Use `editor-jotai` (inside `packages/excalidraw`) or `app-jotai` (inside `excalidraw-app`). Jotai is isolated per-editor on purpose (see architecture §3.5).
+1. **Never import `jotai` directly.** Use `editor-jotai` (inside `packages/excalidraw`) or `app-jotai` (inside `excalidraw-app`). Jotai is isolated per-editor on purpose (see [architecture §3.5](docs/technical/architecture.md#35-jotai--isolated-ui-only-atoms)).
 2. **No barrel / index imports inside `packages/excalidraw/`.** Import the specific module with a direct relative path, not from `.`, `..`, `../index`, or the `@excalidraw/excalidraw` barrel. (Type-only imports from the barrel are allowed.)
 3. **Cross-package imports must respect the dependency layering.** Use the package aliases (`@excalidraw/common`, `@excalidraw/math`, `@excalidraw/element`, …; see `tsconfig.json` `paths`). Do **not** introduce upward/cyclic edges. The allowed direction is: `common ← math ← element ← excalidraw`; `fractional-indexing` and `utils` are standalone. A lower-layer package importing a higher one (e.g. `math` importing from `element`, or any package importing runtime code from `@excalidraw/excalidraw`) is forbidden — only **type** imports are tolerated where the base config allows.
 4. **Use `import type` for type-only imports** (`consistent-type-imports` is an error; fix style is _separate_ type imports). Keep `import/order` groups tidy (`@excalidraw/**` sorts after other externals).
