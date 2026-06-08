@@ -86,7 +86,10 @@ export { actionToggleMidpointSnapping } from "./actionToggleMidpointSnapping";
 export { actionToggleStats } from "./actionToggleStats";
 export { actionUnbindText, actionBindText } from "./actionBoundText";
 export { actionLink } from "./actionLink";
-export { actionToggleElementLock } from "./actionElementLock";
+export {
+  actionToggleElementLock,
+  actionUnlockAllElements,
+} from "./actionElementLock";
 export { actionToggleLinearEditor } from "./actionLinearEditor";
 
 export { actionToggleSearchMenu } from "./actionToggleSearchMenu";

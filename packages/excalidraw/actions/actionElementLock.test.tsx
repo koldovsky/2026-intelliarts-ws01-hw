@@ -3,7 +3,7 @@ import React from "react";
 
 import { Excalidraw } from "../index";
 import { API } from "../tests/helpers/api";
-import { Pointer, UI } from "../tests/helpers/ui";
+import { Keyboard, Pointer, UI } from "../tests/helpers/ui";
 import { render } from "../tests/test-utils";
 
 const { h } = window;
@@ -65,6 +65,44 @@ describe("element locking", () => {
     expect(h.state.selectedElementIds).toEqual({
       [h.elements[0].id]: true,
       [h.elements[1].id]: true,
+    });
+  });
+
+  it("should unlock all elements and select them when using CtrlOrCmd+Shift+U shortcut", async () => {
+    await render(
+      <Excalidraw
+        initialData={{
+          elements: [
+            API.createElement({
+              x: 100,
+              y: 100,
+              width: 100,
+              height: 100,
+              locked: true,
+            }),
+            API.createElement({
+              x: 100,
+              y: 100,
+              width: 100,
+              height: 100,
+              locked: false,
+            }),
+          ],
+        }}
+      />,
+    );
+
+    expect(Object.keys(h.state.selectedElementIds).length).toBe(0);
+    expect(h.elements.map((el) => el.locked)).toEqual([true, false]);
+
+    Keyboard.withModifierKeys({ ctrl: true, shift: true }, () => {
+      Keyboard.keyDown("U");
+      Keyboard.keyUp("U");
+    });
+
+    expect(h.elements.map((el) => el.locked)).toEqual([false, false]);
+    expect(h.state.selectedElementIds).toEqual({
+      [h.elements[0].id]: true,
     });
   });
 });

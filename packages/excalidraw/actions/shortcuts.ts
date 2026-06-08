@@ -47,6 +47,7 @@ export type ShortcutName =
       | "toggleEraserTool"
       | "toggleHandTool"
       | "setFrameAsActiveTool"
+      | "unlockAllElements"
       | "saveFileToDisk"
       | "saveToActiveFile"
       | "toggleShortcuts"
@@ -113,6 +114,7 @@ const shortcutMap: Record<ShortcutName, string[]> = {
   toggleEraserTool: [getShortcutKey("E")],
   toggleHandTool: [getShortcutKey("H")],
   setFrameAsActiveTool: [getShortcutKey("F")],
+  unlockAllElements: [getShortcutKey("CtrlOrCmd+Shift+U")],
   saveFileToDisk: [getShortcutKey("CtrlOrCmd+S")],
   saveToActiveFile: [getShortcutKey("CtrlOrCmd+S")],
   toggleShortcuts: [getShortcutKey("?")],
