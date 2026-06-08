@@ -295,6 +295,10 @@ export const HelpDialog = ({ onClose }: { onClose?: () => void }) => {
               shortcuts={[getShortcutKey("Alt+S")]}
             />
             <Shortcut
+              label={t("labels.midpointSnapping")}
+              shortcuts={[getShortcutKey("Alt+M")]}
+            />
+            <Shortcut
               label={t("labels.toggleGrid")}
               shortcuts={[getShortcutKey("CtrlOrCmd+'")]}
             />
@@ -454,6 +458,10 @@ export const HelpDialog = ({ onClose }: { onClose?: () => void }) => {
             <Shortcut
               label={t("helpDialog.toggleElementLock")}
               shortcuts={[getShortcutKey("CtrlOrCmd+Shift+L")]}
+            />
+            <Shortcut
+              label={t("labels.elementLock.unlockAll")}
+              shortcuts={[getShortcutKey("CtrlOrCmd+Shift+U")]}
             />
             <Shortcut
               label={t("buttons.undo")}

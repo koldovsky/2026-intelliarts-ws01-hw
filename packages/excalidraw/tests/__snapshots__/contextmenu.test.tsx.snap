@@ -7388,6 +7388,7 @@ exports[`contextMenu element > shows context menu for canvas > [end of test] app
             </g>
           </g>
         </svg>,
+        "keyTest": [Function],
         "label": "labels.elementLock.unlockAll",
         "name": "unlockAllElements",
         "perform": [Function],
@@ -7511,6 +7512,7 @@ exports[`contextMenu element > shows context menu for canvas > [end of test] app
       },
       {
         "checked": [Function],
+        "keyTest": [Function],
         "label": "labels.midpointSnapping",
         "name": "midpointSnapping",
         "perform": [Function],

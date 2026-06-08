@@ -211,4 +211,8 @@ export const actionUnlockAllElements = register({
     };
   },
   label: "labels.elementLock.unlockAll",
+  keyTest: (event) =>
+    event.key.toLocaleLowerCase() === KEYS.U &&
+    event[KEYS.CTRL_OR_CMD] &&
+    event.shiftKey,
 });
