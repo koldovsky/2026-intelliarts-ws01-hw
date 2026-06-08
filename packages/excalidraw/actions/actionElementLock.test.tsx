@@ -1,4 +1,4 @@
-import { queryByTestId, fireEvent } from "@testing-library/react";
+import { queryByTestId, fireEvent, act } from "@testing-library/react";
 import React from "react";
 
 import { Excalidraw } from "../index";
@@ -17,6 +17,116 @@ describe("element locking", () => {
 
     const item = queryByTestId(UI.queryContextMenu()!, "unlockAllElements");
     expect(item).toBe(null);
+  });
+
+  it("should unlock all elements and select them when pressing Ctrl+Shift+U", async () => {
+    await render(
+      <Excalidraw
+        initialData={{
+          elements: [
+            API.createElement({
+              x: 100,
+              y: 100,
+              width: 100,
+              height: 100,
+              locked: true,
+            }),
+            API.createElement({
+              x: 200,
+              y: 200,
+              width: 100,
+              height: 100,
+              locked: true,
+            }),
+            API.createElement({
+              x: 300,
+              y: 300,
+              width: 100,
+              height: 100,
+              locked: false,
+            }),
+          ],
+        }}
+      />,
+    );
+
+    expect(h.elements.map((el) => el.locked)).toEqual([true, true, false]);
+    expect(Object.keys(h.state.selectedElementIds).length).toBe(0);
+
+    act(() => {
+      fireEvent.keyDown(document, { key: "U", ctrlKey: true, shiftKey: true });
+    });
+
+    expect(h.elements.map((el) => el.locked)).toEqual([false, false, false]);
+    expect(h.state.selectedElementIds).toEqual({
+      [h.elements[0].id]: true,
+      [h.elements[1].id]: true,
+    });
+  });
+
+  it("should do nothing via Ctrl+Shift+U when no elements are locked", async () => {
+    await render(
+      <Excalidraw
+        initialData={{
+          elements: [
+            API.createElement({
+              x: 100,
+              y: 100,
+              width: 100,
+              height: 100,
+              locked: false,
+            }),
+          ],
+        }}
+      />,
+    );
+
+    expect(h.elements.map((el) => el.locked)).toEqual([false]);
+
+    act(() => {
+      fireEvent.keyDown(document, { key: "U", ctrlKey: true, shiftKey: true });
+    });
+
+    expect(h.elements.map((el) => el.locked)).toEqual([false]);
+    expect(Object.keys(h.state.selectedElementIds).length).toBe(0);
+  });
+
+  it("should do nothing via Ctrl+Shift+U when elements are selected", async () => {
+    await render(
+      <Excalidraw
+        initialData={{
+          elements: [
+            API.createElement({
+              x: 100,
+              y: 100,
+              width: 100,
+              height: 100,
+              locked: true,
+            }),
+            API.createElement({
+              x: 200,
+              y: 200,
+              width: 100,
+              height: 100,
+              locked: false,
+            }),
+          ],
+        }}
+      />,
+    );
+
+    // select the unlocked element — predicate requires selectedElements.length === 0
+    act(() => {
+      mouse.clickAt(250, 250);
+    });
+    expect(Object.keys(h.state.selectedElementIds).length).toBe(1);
+
+    act(() => {
+      fireEvent.keyDown(document, { key: "U", ctrlKey: true, shiftKey: true });
+    });
+
+    // locked element must remain locked
+    expect(h.elements[0].locked).toBe(true);
   });
 
   it("should unlock all elements and select them when using unlockAllElements action in contextMenu", async () => {
