@@ -210,5 +210,12 @@ export const actionUnlockAllElements = register({
       captureUpdate: CaptureUpdateAction.IMMEDIATELY,
     };
   },
+  keyTest: (event) => {
+    return (
+      (event.metaKey || event.ctrlKey) &&
+      event.shiftKey &&
+      event.key.toLocaleLowerCase() === "u"
+    );
+  },
   label: "labels.elementLock.unlockAll",
 });
