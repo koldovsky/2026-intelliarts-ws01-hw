@@ -96,7 +96,7 @@ Archive a completed change in the experimental workflow.
 
 **Output On Success**
 
-```
+```md
 ## Archive Complete
 
 **Change:** <change-name>

@@ -118,10 +118,11 @@ Place the test beside similar tests in the same package.
 
 ## Step 8 — Verify
 
-Invoke **excalidraw-verify** (or run manually):
+Run `yarn test:typecheck` and `yarn test` before claiming work is complete. Invoke **excalidraw-verify** (or run manually):
 
 ```bash
 yarn test:typecheck
+yarn test
 yarn test:app --watch=false
 ```
 

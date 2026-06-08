@@ -98,10 +98,10 @@ Requires OpenSpec CLI installed. On failure, report validation errors; do not ar
 
 Output a short summary:
 
-```
+```md
 ## Verification
 - [x] yarn test:typecheck — pass
-- [x] yarn test — pass (N tests)
+- [x] yarn test:app --watch=false — pass (N tests)
 - [x] yarn test:code — pass / skipped (docs only)
 - [ ] openspec validate — fail: <reason>
 ```

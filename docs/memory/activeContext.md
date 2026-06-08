@@ -2,7 +2,7 @@
 
 ## Current Focus
 
-WS1 homework complete: **WebP image export** shipped on branch `mfranchuk/ws01-homework` (Cursor/OpenSpec implementation).
+WS1 homework complete: **WebP image export** shipped on branch `mfranchuk/ws1-homework` (Cursor/OpenSpec implementation).
 
 ## Recent Changes
 

@@ -1,3 +1,5 @@
+# Export WebP proposal
+
 ## Why
 
 Users can export drawings as PNG or SVG from the image export dialog. WebP provides smaller file sizes for sharing diagrams online while preserving visual quality. The codebase already supports WebP at the canvas blob layer (`IMAGE_MIME_TYPES.webp`, `exportToBlob`), but the product export UI does not expose it.

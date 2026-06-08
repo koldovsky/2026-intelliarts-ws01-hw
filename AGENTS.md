@@ -6,10 +6,10 @@ Guidance for AI agents working in this repository. Grounded in the [Memory Bank]
 
 **Excalidraw** is an open-source virtual whiteboard (React 19, TypeScript, HTML Canvas, Rough.js). This repo is a Yarn workspaces monorepo:
 
-- **`excalidraw-app/`** — production web app (collaboration, persistence, PWA)
-- **`packages/excalidraw/`** — embeddable editor library
-- **`packages/element/`** — element model, scene graph, canvas primitives
-- **`packages/common/`**, **`packages/math/`**, **`packages/fractional-indexing/`**, **`packages/utils/`** — shared layers
+- `**excalidraw-app/`** — production web app (collaboration, persistence, PWA)
+- `**packages/excalidraw/**` — embeddable editor library
+- `**packages/element/**` — element model, scene graph, canvas primitives
+- `**packages/common/**`, `**packages/math/**`, `**packages/fractional-indexing/**`, `**packages/utils/**` — shared layers
 
 Upstream README and dev-docs may be absent in this snapshot. Treat `docs/memory/` and `docs/technical/` as the source of truth for structure and patterns.
 
@@ -17,35 +17,39 @@ Upstream README and dev-docs may be absent in this snapshot. Treat `docs/memory/
 
 Run from repository root:
 
-| Command | Purpose |
-|---------|---------|
-| `yarn install` | Install workspace dependencies |
-| `yarn start` | Dev server (`excalidraw-app`, Vite) |
-| `yarn test` | Vitest tests |
-| `yarn test:all` | Typecheck + ESLint + Prettier + tests |
-| `yarn test:typecheck` | `tsc` only |
-| `yarn test:code` | ESLint only |
+
+| Command               | Purpose                                                                |
+| --------------------- | ---------------------------------------------------------------------- |
+| `yarn install`        | Install workspace dependencies                                         |
+| `yarn start`          | Dev server (`excalidraw-app`, Vite)                                    |
+| `yarn test`           | Vitest tests                                                           |
+| `yarn test:all`       | Typecheck + ESLint + Prettier + tests                                  |
+| `yarn test:typecheck` | `tsc` only                                                             |
+| `yarn test:code`      | ESLint only                                                            |
 | `yarn build:packages` | Build libs: common → fractional-indexing → math → element → excalidraw |
-| `yarn build` | Production build of the app |
-| `yarn fix` | Auto-fix prettier + eslint |
+| `yarn build`          | Production build of the app                                            |
+| `yarn fix`            | Auto-fix prettier + eslint                                             |
+
 
 ## Package Layers and Import Boundaries
 
 Respect dependency direction for **new** code:
 
-```
+```text
 fractional-indexing
 common → math → element → excalidraw → excalidraw-app
 utils (sibling; consumed by excalidraw)
 ```
 
-| Package | May import from | Must not import from |
-|---------|-----------------|----------------------|
-| `packages/common` | `common`, type-only from `element` / `excalidraw` where already established | `excalidraw` runtime, `excalidraw-app` |
-| `packages/math` | `common`, `math` | `element`, `excalidraw`, `excalidraw-app` |
-| `packages/element` | `common`, `math`, `fractional-indexing`, `element` | `excalidraw-app`; avoid new runtime imports from `excalidraw` |
-| `packages/excalidraw` | `common`, `element`, `math`, `excalidraw`, `utils` | `excalidraw-app` |
-| `excalidraw-app` | `@excalidraw/excalidraw`, `@excalidraw/common` | Deep `packages/*` paths unless matching an existing app pattern |
+
+| Package               | May import from                                                             | Must not import from                                            |
+| --------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `packages/common`     | `common`, type-only from `element` / `excalidraw` where already established | `excalidraw` runtime, `excalidraw-app`                          |
+| `packages/math`       | `common`, `math`                                                            | `element`, `excalidraw`, `excalidraw-app`                       |
+| `packages/element`    | `common`, `math`, `fractional-indexing`, `element`                          | `excalidraw-app`; avoid new runtime imports from `excalidraw`   |
+| `packages/excalidraw` | `common`, `element`, `math`, `excalidraw`, `utils`                          | `excalidraw-app`                                                |
+| `excalidraw-app`      | `@excalidraw/excalidraw`, `@excalidraw/common`                              | Deep `packages/*` paths unless matching an existing app pattern |
+
 
 Use workspace imports (`@excalidraw/element`, …), not cross-package relative paths.
 
@@ -53,13 +57,15 @@ Use workspace imports (`@excalidraw/element`, …), not cross-package relative p
 
 Core editor state does **not** live in Jotai.
 
-| Layer | Location | Use for |
-|-------|----------|---------|
-| **AppState** | `App.state`, `packages/excalidraw/appState.ts` | Tool, zoom, scroll, selection UI, theme |
-| **Scene** | `packages/element/src/Scene.ts` | Elements, mutations, selection helpers |
-| **Store** | `packages/element/src/store.ts` | Undo/redo, `CaptureUpdateAction` |
-| **Editor Jotai** | `packages/excalidraw/editor-jotai.ts` | Library UI only (sidebar, dialogs, pickers) |
-| **App Jotai** | `excalidraw-app/app-jotai.ts` | Product chrome (collab, share, language) |
+
+| Layer            | Location                                       | Use for                                     |
+| ---------------- | ---------------------------------------------- | ------------------------------------------- |
+| **AppState**     | `App.state`, `packages/excalidraw/appState.ts` | Tool, zoom, scroll, selection UI, theme     |
+| **Scene**        | `packages/element/src/Scene.ts`                | Elements, mutations, selection helpers      |
+| **Store**        | `packages/element/src/store.ts`                | Undo/redo, `CaptureUpdateAction`            |
+| **Editor Jotai** | `packages/excalidraw/editor-jotai.ts`          | Library UI only (sidebar, dialogs, pickers) |
+| **App Jotai**    | `excalidraw-app/app-jotai.ts`                  | Product chrome (collab, share, language)    |
+
 
 Undoable changes go through actions → `ActionResult` → `App.syncActionResult` (`packages/excalidraw/components/App.tsx`).
 
@@ -75,14 +81,16 @@ Undoable changes go through actions → `ActionResult` → `App.syncActionResult
 
 ## Where to Change Code
 
-| Change type | Primary locations |
-|-------------|-------------------|
-| Primitive shape / element behavior | `packages/element/`, `packages/excalidraw/actions/`, `components/` |
-| Keyboard shortcut | `packages/excalidraw/keys.ts`, `actions/` |
-| Toolbar / panel UI | `packages/excalidraw/components/` |
-| Export / import / persistence format | `packages/excalidraw/data/`, `scene/export.ts` |
-| Collaboration / Firebase / local save | `excalidraw-app/collab/`, `excalidraw-app/data/` |
-| Public embed API | `packages/excalidraw/index.tsx`, imperative API on `App` |
+
+| Change type                           | Primary locations                                                  |
+| ------------------------------------- | ------------------------------------------------------------------ |
+| Primitive shape / element behavior    | `packages/element/`, `packages/excalidraw/actions/`, `components/` |
+| Keyboard shortcut                     | `packages/excalidraw/keys.ts`, `actions/`                          |
+| Toolbar / panel UI                    | `packages/excalidraw/components/`                                  |
+| Export / import / persistence format  | `packages/excalidraw/data/`, `scene/export.ts`                     |
+| Collaboration / Firebase / local save | `excalidraw-app/collab/`, `excalidraw-app/data/`                   |
+| Public embed API                      | `packages/excalidraw/index.tsx`, imperative API on `App`           |
+
 
 Prefer the **smallest owning package**. Editor logic stays in `packages/excalidraw` / `packages/element`; product-only behavior stays in `excalidraw-app`.
 
@@ -119,7 +127,7 @@ Prefer the **smallest owning package**. Editor logic stays in `packages/excalidr
 
 ### Context and i18n
 
-- Use `.cursorignore` as guidance for what to deprioritize (build artifacts, snapshots, bulk locales)—not as an excuse to skip `packages/**` source.
+- Use `.cursorignore` as guidance for what to deprioritize (build artifacts, snapshots, bulk locales)—not as an excuse to skip `packages/`** source.
 - For user-visible strings, update `packages/excalidraw/locales/en.json` only unless explicitly asked to translate all locales.
 
 ---
@@ -158,15 +166,17 @@ Prefer the **smallest owning package**. Editor logic stays in `packages/excalidr
 
 ## Documentation Map
 
-| Doc | Purpose |
-|-----|---------|
-| [docs/memory/projectbrief.md](docs/memory/projectbrief.md) | What the project is, layout, user flows |
-| [docs/memory/techContext.md](docs/memory/techContext.md) | Stack, commands, packages |
-| [docs/memory/systemPatterns.md](docs/memory/systemPatterns.md) | Actions, Scene, rendering patterns |
-| [docs/technical/architecture.md](docs/technical/architecture.md) | Architecture, data flow, dependencies |
-| [docs/skills-research.md](docs/skills-research.md) | Agent skills research |
-| `.cursor/skills/excalidraw-verify/` | Run typecheck, tests, lint before done |
-| `.cursor/skills/excalidraw-feature/` | Implement shapes, shortcuts, toolbar features |
+
+| Doc                                                              | Purpose                                       |
+| ---------------------------------------------------------------- | --------------------------------------------- |
+| [docs/memory/projectbrief.md](docs/memory/projectbrief.md)       | What the project is, layout, user flows       |
+| [docs/memory/techContext.md](docs/memory/techContext.md)         | Stack, commands, packages                     |
+| [docs/memory/systemPatterns.md](docs/memory/systemPatterns.md)   | Actions, Scene, rendering patterns            |
+| [docs/technical/architecture.md](docs/technical/architecture.md) | Architecture, data flow, dependencies         |
+| [docs/skills-research.md](docs/skills-research.md)               | Agent skills research                         |
+| `.cursor/skills/excalidraw-verify/`                              | Run typecheck, tests, lint before done        |
+| `.cursor/skills/excalidraw-feature/`                             | Implement shapes, shortcuts, toolbar features |
+
 
 ## Spec-Driven Changes (OpenSpec)
 

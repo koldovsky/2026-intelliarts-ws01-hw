@@ -1,3 +1,5 @@
+# export-webp (archive spec)
+
 ## ADDED Requirements
 
 ### Requirement: WebP export from image export dialog

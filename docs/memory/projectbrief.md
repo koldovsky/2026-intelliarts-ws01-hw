@@ -17,7 +17,7 @@ Development here is **brownfield**: a large existing codebase where new work sho
 
 ## Repository Layout
 
-```
+```text
 excalidraw-app/     Runnable product (collab, storage, PWA, Sentry)
 packages/
   common/           Shared constants, utils, event bus

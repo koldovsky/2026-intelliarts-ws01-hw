@@ -30,7 +30,7 @@ Every action returns `captureUpdate` in its `ActionResult`.
 
 All undoable mutations should go through the action system.
 
-```
+```text
 actions/*.ts  →  register(action)     [packages/excalidraw/actions/register.ts]
                       ↓
 App constructor  →  actionManager.registerAll(actions)
@@ -84,7 +84,7 @@ Three canvas layers, orchestrated from `App.tsx`:
 
 Render trigger chain:
 
-```
+```text
 scene.onUpdate  →  App.triggerRender()
                       ↓
 Renderer.getRenderableElements()   [packages/excalidraw/scene/Renderer.ts]

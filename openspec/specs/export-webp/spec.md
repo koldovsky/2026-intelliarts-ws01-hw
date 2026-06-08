@@ -5,6 +5,7 @@
 Expose **Export to WebP** in the image export dialog so users can download smaller raster files than PNG while reusing the same export settings (background, padding, scale, light/dark mode). Shipped implementation follows the archived OpenSpec change `2026-06-03-export-webp`.
 
 ## Requirements
+
 ### Requirement: WebP export from image export dialog
 
 The system SHALL provide an "Export to WebP" action in the image export dialog when the canvas contains exportable elements.

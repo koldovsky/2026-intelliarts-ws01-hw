@@ -1,3 +1,5 @@
+# export-webp tasks
+
 ## 1. Types and constants
 
 - [x] 1.1 Add `webp` to `EXPORT_IMAGE_TYPES` in `packages/common/src/constants.ts`

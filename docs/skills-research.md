@@ -20,9 +20,9 @@ OpenSpec skills (`.cursor/skills/openspec-*`) handle spec lifecycle; the skills 
 
 ---
 
-## Additional Skills (Candidates)
+## Recommended Skill Candidates
 
-### excalidraw-brownfield (Medium priority)
+### excalidraw-brownfield
 
 **Why:** Large codebase; agents often open `App.tsx` first or edit the wrong package.
 
@@ -34,7 +34,7 @@ OpenSpec skills (`.cursor/skills/openspec-*`) handle spec lifecycle; the skills 
 
 ---
 
-### excalidraw-action (Medium priority)
+### excalidraw-action
 
 **Why:** `ActionResult`, `captureUpdate`, and `register()` are easy to get wrong.
 
@@ -48,15 +48,11 @@ Pairs with **excalidraw-feature** for shortcut-heavy work.
 
 ---
 
-### excalidraw-export (Low priority)
+## Future ideas
 
-**Why:** Export/import uses `data/` and `scene/export.ts`, not the canvas action path.
-
-**Would automate:** Find existing PNG/SVG/clipboard flow → add serializer → test → **excalidraw-verify**.
-
-**Triggers:** export format, clipboard, save as, download
-
-**Path:** `.cursor/skills/excalidraw-export/SKILL.md`
+| Skill | Note |
+| ----- | ---- |
+| **excalidraw-export** | Export/import lives in `data/` and `scene/export.ts`, not the action path; automate PNG/SVG/clipboard exemplar → serializer → **excalidraw-verify**. Triggers: export format, clipboard, save as, download. |
 
 ---
 
@@ -93,7 +89,7 @@ description: <what it does; when to use it — third person>
 
 ## Existing OpenSpec Integration
 
-- Skills: `openspec-propose`, `openspec-apply-change`, `openspec-archive-change`, `openspec-explore`, `openspec-sync-specs`
-- Commands: `.cursor/commands/opsx-*`
+- Skills: `openspec-propose`, `openspec-continue-change`, `openspec-apply-change`, `openspec-archive-change`, `openspec-explore`, `openspec-sync-specs`
+- Commands: `/opsx-propose`, `/opsx-continue`, `/opsx-apply`, `/opsx-archive`, `/opsx-sync`, `/opsx-explore` (`.cursor/commands/opsx-*`)
 
 Use OpenSpec for **what** to build; use **excalidraw-feature** for **how** in this codebase; use **excalidraw-verify** before calling work complete.

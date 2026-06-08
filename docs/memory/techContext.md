@@ -40,7 +40,7 @@ yarn start:production # build + serve on localhost:5001
 
 Build order for libraries (from root `package.json` scripts):
 
-```
+```text
 build:common → build:fractional-indexing → build:math → build:element → build:excalidraw
 ```
 
@@ -58,7 +58,7 @@ build:common → build:fractional-indexing → build:math → build:element → 
 
 ## Package Dependencies
 
-```
+```text
 fractional-indexing (standalone)
 common (tinycolor2)
   └── math

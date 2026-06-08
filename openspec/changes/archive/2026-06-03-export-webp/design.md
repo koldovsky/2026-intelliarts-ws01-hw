@@ -1,3 +1,5 @@
+# WebP export design
+
 ## Context
 
 Image export flows through `App.onExportImage` → `exportCanvas` in `packages/excalidraw/data/index.ts`. PNG uses `exportToCanvas` then `canvasToBlob`. SVG uses `exportToSvg`. `packages/utils/src/export.ts` already implements `exportToBlob` with configurable `mimeType`, including `image/webp` with quality default 0.8.

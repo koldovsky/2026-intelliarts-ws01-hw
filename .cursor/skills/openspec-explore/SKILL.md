@@ -9,6 +9,8 @@ metadata:
   generatedBy: "1.4.0"
 ---
 
+# Explore
+
 Enter explore mode. Think deeply. Visualize freely. Follow the conversation wherever it goes.
 
 **IMPORTANT: Explore mode is for thinking, not implementing.** You may read files, search code, and investigate the codebase, but you must NEVER write code or implement features. If the user asks you to implement something, remind them to exit explore mode first and create a change proposal. You MAY create OpenSpec artifacts (proposals, designs, specs) if the user asks—that's capturing thinking, not implementing.
@@ -51,7 +53,8 @@ Depending on what the user brings, you might:
 - Recommend a path (if asked)
 
 **Visualize**
-```
+
+```text
 ┌─────────────────────────────────────────┐
 │     Use ASCII diagrams liberally        │
 ├─────────────────────────────────────────┤
@@ -82,6 +85,7 @@ You have full context of the OpenSpec system. Use it naturally, don't force it.
 ### Check for context
 
 At the start, quickly check what exists:
+
 ```bash
 openspec list --json
 ```
@@ -145,7 +149,8 @@ If the user mentions a change or you detect one is relevant:
 ## Handling Different Entry Points
 
 **User brings a vague idea:**
-```
+
+```text
 User: I'm thinking about adding real-time collaboration
 
 You: Real-time collab is a big space. Let me think about this...
@@ -168,7 +173,8 @@ You: Real-time collab is a big space. Let me think about this...
 ```
 
 **User brings a specific problem:**
-```
+
+```text
 User: The auth system is a mess
 
 You: [reads codebase]
@@ -199,7 +205,8 @@ You: [reads codebase]
 ```
 
 **User is stuck mid-implementation:**
-```
+
+```text
 User: /opsx:explore add-auth-system
       The OAuth integration is more complex than expected
 
@@ -216,7 +223,8 @@ You: [reads change artifacts]
 ```
 
 **User wants to compare options:**
-```
+
+```text
 User: Should we use Postgres or SQLite?
 
 You: Generic answer is boring. What's the context?
@@ -257,7 +265,7 @@ There's no required ending. Discovery might:
 
 When it feels like things are crystallizing, you might summarize:
 
-```
+```md
 ## What We Figured Out
 
 **The problem**: [crystallized understanding]

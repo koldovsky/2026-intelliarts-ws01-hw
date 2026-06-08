@@ -268,7 +268,7 @@ flowchart BT
 
 Root `package.json` script `build:packages` runs:
 
-```
+```bash
 yarn build:common
   && yarn build:fractional-indexing
   && yarn build:math

@@ -2,8 +2,8 @@
 
 Same Task 3 capability: **Export to WebP** from the image export dialog.
 
-| Variant | Time | Tokens | Quality | Rework | Notes |
-|---------|------|--------|---------|--------|-------|
+| Варіант (інструмент/модель) | Час | Токени | Якість | Переробки | Моменти |
+| --------------------------- | --- | ------ | ------ | --------- | ------- |
 | **Cursor** (Composer) | ~1–2 min | Not recorded | Good — `en.json`, Vitest, minimal PNG-path extension | None | Restored as final implementation |
 | **Claude Code** (Sonnet 4.5) | ~8 min | ~84k (est.) | Issues in `actionExport.tsx` and `ImageExportDialog.tsx` | Replaced by Cursor impl | See errors below |
 
