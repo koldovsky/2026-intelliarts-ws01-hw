@@ -1,0 +1,4 @@
+{
+  "contextPaths": ["excalidraw-app", "packages", "scripts", "public", ".github", "package.json", "tsconfig.json", "vitest.config.mts", ".eslintrc.json", ".env.development", ".env.production", "docker-compose.yml", "Dockerfile"],
+  "ignorePaths": ["packages/*/dist", "packages/*/build", "excalidraw-app/build", "excalidraw-app/dist", "excalidraw-app/dev-dist", "coverage", "*.log", "*.tgz", "meta*.json", ".yarn", "firebase"]
+}
