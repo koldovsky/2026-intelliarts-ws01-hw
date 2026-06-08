@@ -1,4 +1,4 @@
-## Context
+# Context
 
 The current generic-shape pipeline assumes three first-class shapes: `rectangle`, `diamond`, and `ellipse`. That assumption appears in the element/tool unions, tool registries, conversion popup, text-container helpers, binding logic, snapping, collision/hit-testing, and the shared rendering/export path (`ShapeCache` plus canvas/SVG renderers). A triangle feature therefore is not a single rendering change; it needs a coordinated update across the generic element model and the geometry helpers that existing editing flows depend on.
 

@@ -1,4 +1,4 @@
-## Why
+# Why
 
 Excalidraw has first-class primitives for rectangle, diamond, and ellipse, but triangles still require line/polygon workarounds that do not participate in the same editing, binding, text-container, conversion, and export flows. Adding a native triangle fills a common diagramming gap and makes the generic shape model more complete.
 

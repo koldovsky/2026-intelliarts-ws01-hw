@@ -2,12 +2,12 @@
 
 ## Tech Stack
 
-- **Language**: TypeScript
-- **Frontend Framework**: React
-- **Build Tool / Bundler**: Vite
-- **Testing**: Vitest
-- **Package Manager**: Yarn (version 1.22.x) with Yarn Workspaces
-- **Core Dependencies**: RoughJS, Jotai
+- **Language**: TypeScript 5.9.3
+- **Frontend Framework**: React 19.x
+- **Build Tool / Bundler**: Vite 5.0.12
+- **Testing**: Vitest 3.0.6
+- **Package Manager**: Yarn 1.22.22 with Yarn Workspaces
+- **Core Dependencies**: RoughJS 4.6.4, Jotai 2.11.0
 
 ## Monorepo Structure
 

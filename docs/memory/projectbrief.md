@@ -1,22 +1,21 @@
 # Project Brief
 
-## Overview
+## What is Excalidraw?
 
-This repository contains a snapshot of the Excalidraw project, which serves as a practical assignment for the workshop **"Modern AI SDLC: Greenfield vs Brownfield"**.
+Excalidraw is an open-source virtual whiteboard for sketching hand-drawn-like diagrams directly in the browser. It requires no account or installation — users open the app and start drawing immediately.
 
-Excalidraw itself is a popular, open-source virtual whiteboard tool used for sketching hand-drawn-like diagrams. This snapshot represents a large TypeScript monorepo codebase.
+## Core Value
 
-## Assignment Context
+- **Hand-drawn aesthetic**: All shapes render with a natural, sketch-like style powered by the Rough.js library.
+- **Real-time collaboration**: Multiple users can draw on the same canvas simultaneously via shareable room links.
+- **Offline-first / PWA**: Works fully offline; the app installs as a Progressive Web App.
+- **End-to-end encrypted sharing**: Shared scenes are encrypted client-side; the server never sees canvas content.
+- **Export flexibility**: Scenes export as SVG, PNG, or the native `.excalidraw` JSON format and can be embedded in other tools.
 
-This specific "brownfield" repository has had its documentation intentionally removed (like `README.md`, `CONTRIBUTING.md`, etc.). The primary objective of the workshop tasks is to:
+## Primary Users
 
-1. Re-establish context and documentation via AI Code Archaeology.
-2. Establish a "Memory Bank" for future AI agents to follow.
-3. Configure agent rules (`.cursorignore`, `AGENTS.md`).
-4. Implement a small "greenfield-style capability slice" inside the larger brownfield application.
+Developers, designers, and teams who need quick, low-friction diagrams — architecture sketches, flowcharts, wireframes — without the overhead of polished diagramming tools.
 
-## Core Directives
+## Technology
 
-- Ensure all technical decisions are cross-checked with the actual codebase.
-- Maintain a clean and modular structure within the monorepo workspaces.
-- Document any recurring AI-agent workflows.
+TypeScript monorepo with three main packages: the `excalidraw` React component library (published to npm), the `excalidraw-app` browser application, and `@excalidraw/utils` shared helpers. State management is handled internally; the component exposes a clean API for embedding.

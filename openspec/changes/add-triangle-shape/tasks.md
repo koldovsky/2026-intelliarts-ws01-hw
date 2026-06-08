@@ -1,4 +1,4 @@
-## 1. Surface triangle in the generic shape model
+# 1. Surface triangle in the generic shape model
 
 - [x] 1.1 Add `triangle` to the shared tool/element/type registries, restore handling, and shape metadata used by the editor
 - [x] 1.2 Add the triangle icon, localized label, help entry, toolbar/mobile picker entry, and `Y` keyboard shortcut without renumbering existing numeric shortcuts

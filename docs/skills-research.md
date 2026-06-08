@@ -45,39 +45,11 @@ A workflow is a good skill if it is (a) **repeated** across the codebase, (b) **
 
 ---
 
-## Skill 3 — "Run & write tests the Excalidraw way" (everyday workflow)
-
-**Why:** Every change should ship with a passing test, and the repo has strong conventions and ready-made helpers that an agent should use instead of reinventing setup. This is the most _frequently_ invoked workflow.
-
-**What it automates:**
-
-- Choosing the run command: `yarn test` (watch) vs `yarn test:app --watch=false` (single run) vs `yarn test:update` (snapshots) vs the full gate `yarn test:all` (typecheck + eslint + prettier + tests).
-- Scaffolding a `*.test.ts(x)` file (colocated or under a package `tests/` dir) using the shared helpers in [`tests/helpers/`](../packages/excalidraw/tests/helpers/) (`ui.ts`, `api.ts`, `mocks.ts`) and Vitest globals configured in [`setupTests.ts`](../setupTests.ts).
-- Reminding the agent to run the **full gate before declaring done** (CI parity).
-
-**Verification:** the command exit codes themselves; `yarn test:all` green.
-
----
-
-## Skill 4 — "Add an export/import format" (optional, scoped)
-
-**Why:** Export/import is a self-contained subsystem in [`packages/excalidraw/data/`](../packages/excalidraw/data/) + [`scene/export.ts`](../packages/excalidraw/scene/export.ts), and it's a WS1 Task 3 capability. A skill keeps a new format consistent with the existing serialize/blob/image paths and reuses the shared renderers rather than drawing ad hoc.
-
-**What it automates:** add the serializer/deserializer alongside [`data/json.ts`](../packages/excalidraw/data/json.ts), [`data/blob.ts`](../packages/excalidraw/data/blob.ts), [`data/image.ts`](../packages/excalidraw/data/image.ts); wire the export action in [`actions/actionExport.tsx`](../packages/excalidraw/actions/actionExport.tsx); reuse `exportToCanvas`/`renderSceneToSvg` with the `isExporting` flag (architecture §5.4).
-
-**Verification:** extend [`tests/export.test.tsx`](../packages/excalidraw/tests/export.test.tsx) / `tests/scene/export.test.ts`; run `yarn test`.
-
----
-
 ## Recommendation
 
 | Skill | Recurrence | Complexity removed | Priority |
 | --- | --- | --- | --- |
 | 1. Add an action | Very high (~40 examples) | Medium | **Build first** |
 | 2. Add a shape | Medium | High (cross-package) | High |
-| 3. Run/write tests | Every change | Low–Medium | High (foundational) |
-| 4. Export format | Low | Medium | Optional |
-
-**Build first:** Skill 1 (highest recurrence, directly enables Task 3's shortcut/toolbar capabilities), paired with Skill 3 (tests are the verification gate for every other skill).
 
 A concrete skill could be added under `.claude/skills/<name>/SKILL.md` (Claude Code) or `.cursor/skills/` (Cursor); this document is the research/justification step.
