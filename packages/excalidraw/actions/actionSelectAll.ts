@@ -13,6 +13,7 @@ import type { ExcalidrawElement } from "@excalidraw/element/types";
 import { selectAllIcon } from "../components/icons";
 
 import { register } from "./register";
+import type { AppClassProperties, AppState } from "../types";
 
 export const actionSelectAll = register({
   name: "selectAll",
@@ -60,4 +61,45 @@ export const actionSelectAll = register({
     };
   },
   keyTest: (event) => event[KEYS.CTRL_OR_CMD] && event.key === KEYS.A,
+});
+
+export const actionSelectSameType = register({
+  name: "selectSameType",
+  label: "labels.selectSameType",
+  trackEvent: { category: "canvas" },
+  viewMode: false,
+  perform: (elements, appState, _value, app) => {
+    const nonDeleted = getNonDeletedElements(elements);
+    const selectedElements = app.scene.getSelectedElements({
+      selectedElementIds: appState.selectedElementIds,
+      elements: nonDeleted,
+    });
+
+    if (selectedElements.length === 0) {
+      return false;
+    }
+
+    const selectedTypes = new Set(selectedElements.map((el) => el.type));
+
+    const selectedElementIds = nonDeleted
+      .filter((el) => selectedTypes.has(el.type) && !el.locked)
+      .reduce((map: Record<ExcalidrawElement["id"], true>, el) => {
+        map[el.id] = true;
+        return map;
+      }, {});
+
+    return {
+      appState: {
+        ...appState,
+        ...selectGroupsForSelectedElements(
+          { editingGroupId: null, selectedElementIds },
+          nonDeleted,
+          appState,
+          app,
+        ),
+      },
+      captureUpdate: CaptureUpdateAction.IMMEDIATELY,
+    };
+  },
+  keyTest: (event) => event.altKey && event.key === KEYS.T,
 });
