@@ -377,6 +377,10 @@ export const HelpDialog = ({ onClose }: { onClose?: () => void }) => {
               shortcuts={[getShortcutKey("CtrlOrCmd+A")]}
             />
             <Shortcut
+              label={t("labels.selectSameType")}
+              shortcuts={[getShortcutKey("Alt+T")]}
+            />
+            <Shortcut
               label={t("labels.multiSelect")}
               shortcuts={[getShortcutKey(`Shift+${t("helpDialog.click")}`)]}
             />

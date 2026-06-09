@@ -24,10 +24,8 @@ describe("actionSelectSameType", () => {
       h.app.actionManager.executeAction(actionSelectSameType);
     });
 
-    assertElements(h.elements, [
-      { id: r1.id },
-      { id: e1.id },
-    ]);
+    assertElements(h.elements, [{ id: r1.id }, { id: e1.id }]);
+    expect(Object.keys(h.state.selectedElementIds)).toHaveLength(0);
   });
 
   it("selects all elements of the same type as the selected element", async () => {
@@ -104,5 +102,45 @@ describe("actionSelectSameType", () => {
       { id: r1.id, selected: true },
       { id: r2.id },
     ]);
+  });
+
+  it("does not select bound text elements (text with containerId)", async () => {
+    const r1 = API.createElement({ type: "rectangle" });
+    const t1 = API.createElement({
+      type: "text",
+      containerId: r1.id,
+      text: "label",
+    });
+    const t2 = API.createElement({ type: "text", text: "standalone" });
+
+    API.setElements([r1, t1, t2]);
+    API.setSelectedElements([t2]);
+
+    act(() => {
+      h.app.actionManager.executeAction(actionSelectSameType);
+    });
+
+    assertElements(h.elements, [
+      { id: r1.id },
+      { id: t1.id },
+      { id: t2.id, selected: true },
+    ]);
+  });
+
+  it("is a no-op when a linear element is being edited", async () => {
+    const r1 = API.createElement({ type: "rectangle" });
+    const r2 = API.createElement({ type: "rectangle" });
+
+    API.setElements([r1, r2]);
+    API.setSelectedElements([r1]);
+    API.setAppState({
+      selectedLinearElement: { isEditing: true } as any,
+    });
+
+    act(() => {
+      h.app.actionManager.executeAction(actionSelectSameType);
+    });
+
+    assertElements(h.elements, [{ id: r1.id, selected: true }, { id: r2.id }]);
   });
 });

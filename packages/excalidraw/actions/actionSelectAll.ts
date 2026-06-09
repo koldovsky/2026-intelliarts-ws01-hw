@@ -69,6 +69,10 @@ export const actionSelectSameType = register({
   trackEvent: { category: "canvas" },
   viewMode: false,
   perform: (elements, appState, _value, app) => {
+    if (appState.selectedLinearElement?.isEditing) {
+      return false;
+    }
+
     const nonDeleted = getNonDeletedElements(elements);
     const selectedElements = app.scene.getSelectedElements({
       selectedElementIds: appState.selectedElementIds,
@@ -82,7 +86,12 @@ export const actionSelectSameType = register({
     const selectedTypes = new Set(selectedElements.map((el) => el.type));
 
     const selectedElementIds = nonDeleted
-      .filter((el) => selectedTypes.has(el.type) && !el.locked)
+      .filter(
+        (el) =>
+          selectedTypes.has(el.type) &&
+          !el.locked &&
+          !(isTextElement(el) && el.containerId),
+      )
       .reduce((map: Record<ExcalidrawElement["id"], true>, el) => {
         map[el.id] = true;
         return map;
@@ -97,6 +106,16 @@ export const actionSelectSameType = register({
           appState,
           app,
         ),
+        selectedLinearElement: (() => {
+          const ids = Object.keys(selectedElementIds);
+          if (ids.length !== 1) {
+            return null;
+          }
+          const sole = nonDeleted.find((el) => el.id === ids[0]);
+          return sole && isLinearElement(sole)
+            ? new LinearElementEditor(sole, arrayToMap(elements))
+            : null;
+        })(),
       },
       captureUpdate: CaptureUpdateAction.IMMEDIATELY,
     };
