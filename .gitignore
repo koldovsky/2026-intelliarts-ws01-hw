@@ -26,4 +26,5 @@ coverage
 dev-dist
 html
 meta*.json
-.claude
+.claude/settings.json
+repomix-output.*

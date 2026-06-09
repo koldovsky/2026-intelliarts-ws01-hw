@@ -310,6 +310,7 @@ import {
   actionGroup,
   actionPasteStyles,
   actionSelectAll,
+  actionSelectSameType,
   actionSendBackward,
   actionSendToBack,
   actionToggleGridMode,
